@@ -1,22 +1,29 @@
-{% load staticfiles %}
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>{% block title %}{% endblock title %}Site Name</title>
-
-        <meta http-equiv="X-UA-Compatible" content="chrome=IE7" />
-
-        <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
-        <meta name="apple-mobile-web-app-capable" content="yes"/>
-        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-
-        <link rel="stylesheet" href="{% static 'css/screen.css' %}" media="screen, projection"/>
-
-        {% block extra_head %}{% endblock extra_head %}
-
-    </head>
-    <body id="{% block body_id %}{% endblock %}" class="{% block body_class %}{% endblock %}">
-        {% block content %}{% endblock content %}
-    </body>
+<html>
+<head>
+    {% load staticfiles %}
+	<title>
+    Test for 42cup
+    </title>
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link  rel="stylesheet" href={% static 'css/style.css' %}>
+</head>
+<body>
+	<nav class='navbar navbar-default'>
+		<div class="container-fluid">
+		    <div class="navbar-header">
+				<a href="/" class='navbar-brand'>42cc main</a>
+			</div>
+				    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				    	      <ul class="nav navbar-nav">
+								<li><a href="/admin/">adminka</a></li>
+								<li><a href="/spy/">request spy</a></li>
+								<li><a href="/edit/">editing</a></li>
+							  </ul>
+					</div>
+		</div>
+	</nav>
+		{% block content %}{% endblock %}
+</body>
 </html>

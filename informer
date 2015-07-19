@@ -1,0 +1,2 @@
+NOW=$(date +'%d-%m-%Y')
+./manage.py informer contact 2> $NOW.dat

@@ -41,8 +41,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    'apps.hello',
+    'apps.contact',
+    'bootstrapform',
+    'apps.contact.templatetags.admin_editor',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -52,6 +53,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'apps.contact.MyMiddleWare.MyMiddleWare',
+
 )
 
 ROOT_URLCONF = 'fortytwo_test_task.urls'
@@ -109,21 +112,21 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    # Put strings here, like "/home/html/static" or "C:/www/django/static".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(BASE_DIR, 'app.contact.static'),
     os.path.join(BASE_DIR, 'assets'),
 )
 
 
 # Template Settings
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or
-    # "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(BASE_DIR, 'app.contact.templates'),
     os.path.join(BASE_DIR, 'templates'),
 )
 
 # Turn off south during test
 SOUTH_TESTS_MIGRATE = False
+#MEDIA_URL = '/media/'
+#MEDIA_ROOT = '/home/tyler/projects/FortyTwoTestTask/media/'
+EMAIL_FOR_MAIN_PAGE = 'terkel919@gmail.com'
+IMAGE_SIZE = (200, 200)
+LOGIN_REDIRECT_URL = '/edit/'

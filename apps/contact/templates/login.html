@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+	{% block content %}
+	{% load bootstrap %}
+	<div class='col-md-6'>
+		<form action="" class="form-horizontal" method="post">
+			{% csrf_token %}
+			{{form|bootstrap_horizontal}}
+			<Button class='btn btn-primary col-md-2' type="submit" value="Login">Login</Button>
+			<input type="hidden" name="next" value={{ next }}>
+		</form>
+		<div>
+	{% endblock %}
