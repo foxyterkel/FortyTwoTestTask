@@ -1,5 +1,5 @@
-from .common import *  # falke8.ignore
+from .common import *  # flake8: noqa
 try:
-    from .local import *  # flake8.ignore
+    from .local import *  # flake8: noqa
 except ImportError:
     pass
