@@ -112,14 +112,14 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'app.contact.static'),
+    os.path.join(BASE_DIR, 'apps.contact.static'),
     os.path.join(BASE_DIR, 'assets'),
 )
 
 
 # Template Settings
 TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'app.contact.templates'),
+    os.path.join(BASE_DIR, 'apps.contact.templates'),
     os.path.join(BASE_DIR, 'templates'),
 )
 

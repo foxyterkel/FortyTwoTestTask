@@ -9,13 +9,14 @@ from apps.contact.forms import EditForm
 
 
 class ModelTester(unittest.TestCase):
+
     def setUp(self):
         self.client = Client()
-        Contact.objects.create(first_name='Sergii', last_name='Vanzha',
-                               bio='A little story about myself',
-                               email='terkel919@gmail.com',
-                               contacts='+380662352011', skype='xafdx1',
-                               jaber='foxyterkel@42cc.co')
+        # Contact.objects.create(first_name='Sergii', last_name='Vanzha',
+        #                        bio='A little story about myself',
+        #                        email='terkel919@gmail.com',
+        #                        contacts='+380662352011', skype='xafdx1',
+        #                        jaber='foxyterkel@42cc.co')
         User.objects.create(username='admin', password='admin')
 
     def tearDown(self):

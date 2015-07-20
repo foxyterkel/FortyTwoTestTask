@@ -17,7 +17,7 @@ from apps.contact.forms import EditForm
 
 class Main(View):
     def get(self, request):
-        # bio = Contact.objects.get(email=EMAIL_FOR_MAIN_PAGE)
+        bio = Contact.objects.get(email=EMAIL_FOR_MAIN_PAGE)
         return render(request, 'index.html', {'bio': bio})
 
 
