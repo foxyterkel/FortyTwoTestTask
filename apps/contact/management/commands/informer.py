@@ -3,6 +3,9 @@ from django.apps import apps
 # import os
 
 
+#command informer for manager.py to give info about present models
+#in base dir there is iforber bash script for running this command
+
 class Command(BaseCommand):
     help = 'giving some info about current app'
 
