@@ -2,7 +2,7 @@
 Django unit test for project fortytwo_test_task
 Making client and superuser in setUp
 each test for differnt parts of project
-can be run as separare test
+can be start as separare test
 """
 
 from django.test.client import Client
@@ -22,8 +22,9 @@ class ModelTester(unittest.TestCase):
         Contact.objects.all().delete()
         User.objects.all().delete()
 
-    #test for main page
-
+    """
+    test_main for testing main page. Can be start separate.
+    """
     def test_main(self):
         contact = Contact.objects.all()
         self.assertEqual(contact.__len__(), 1)
