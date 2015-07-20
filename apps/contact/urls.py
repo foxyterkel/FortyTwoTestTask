@@ -1,5 +1,5 @@
 __author__ = 'tyler'
-from django.conf.urls import include, url
+from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib.auth.views import login, logout
 

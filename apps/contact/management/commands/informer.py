@@ -1,6 +1,6 @@
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from django.apps import apps
-import os
+# import os
 
 
 class Command(BaseCommand):

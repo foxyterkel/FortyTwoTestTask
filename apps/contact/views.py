@@ -1,6 +1,5 @@
 from django.shortcuts import render, HttpResponse
 from django.views.generic import View
-from django.views.generic.edit import UpdateView
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import json
 from PIL import Image

@@ -125,8 +125,6 @@ TEMPLATE_DIRS = (
 
 # Turn off south during test
 SOUTH_TESTS_MIGRATE = False
-#MEDIA_URL = '/media/'
-#MEDIA_ROOT = '/home/tyler/projects/FortyTwoTestTask/media/'
 EMAIL_FOR_MAIN_PAGE = 'terkel919@gmail.com'
 IMAGE_SIZE = (200, 200)
 LOGIN_REDIRECT_URL = '/edit/'
