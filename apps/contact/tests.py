@@ -22,10 +22,11 @@ class ModelTester(unittest.TestCase):
         Contact.objects.all().delete()
         User.objects.all().delete()
 
-    """
-    test_main for testing main page. Can be start separate.
-    """
     def test_main(self):
+        """
+        test_main for testing main page. Can be start separate.
+        """
+
         contact = Contact.objects.all()
         self.assertEqual(contact.__len__(), 1)
         self.assertEqual(contact[0].first_name, 'Sergii')

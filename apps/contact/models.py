@@ -3,9 +3,6 @@ from django.utils import timezone
 from django.core.validators import validate_email, MinLengthValidator, \
     RegexValidator
 
-# from django.db.models.signals import post_save, post_delete, post_init
-# from apps.contact.signals import my_receiver
-
 
 def generate_path(self, filename):
     url = 'pictures/%s/%s' % (self.email, filename)
@@ -43,6 +40,9 @@ class MyMiddle(models.Model):
     class Meta:
         ordering = ['-created_at', ]
 
+
+# from django.db.models.signals import post_save, post_delete, post_init
+# from apps.contact.signals import my_receiver
 
 # post_init.connect(my_receiver, dispatch_uid="my_unique_identifier",
 #                   sender=(MyMiddle, Contact))

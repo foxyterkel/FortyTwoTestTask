@@ -1,5 +1,5 @@
-from .common import *  # pyflakes.ignore
+from .common import *  # falke8.ignore
 try:
-    from .local import *  # pyflakes.ignore
+    from .local import *  # flake8.ignore
 except ImportError:
     pass

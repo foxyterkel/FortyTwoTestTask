@@ -1,8 +1,6 @@
 from django.core.management.base import BaseCommand
 from django.apps import apps
 
-# import os
-
 
 # command informer for manager.py to give info about present models
 # in base dir there is iforber bash script for running this command
