@@ -1,4 +1,5 @@
 Django==1.8.2
+42cc-pystyle
 Pillow==2.9.0
 argparse==1.2.1
 django-bootstrap-form==3.2
