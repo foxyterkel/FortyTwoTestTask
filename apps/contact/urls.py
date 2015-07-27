@@ -11,7 +11,7 @@ urlpatterns = [
     url(r'^spy/$', RequestSpy.as_view()),
     url(r'^updater/$', Updater.as_view()),
     url(r'^edit/$', Editor.as_view()),
-    # url(r'^account/login/$', login, {'template_name': 'login.html'}),
-    # url(r'^account/logout/$', logout, {'next_page': '/'}),
+    url(r'^account/login/$', login, {'template_name': 'login.html'}),
+    url(r'^account/logout/$', logout, {'next_page': '/'}),
 ]
 urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
