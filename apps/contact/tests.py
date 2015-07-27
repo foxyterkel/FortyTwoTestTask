@@ -9,7 +9,7 @@ from django.test.client import Client
 import unittest
 from django.contrib.auth.models import User
 
-from apps.contact.models import Contact
+from apps.contact.models import Contact, MyMiddle
 
 
 class ModelTester(unittest.TestCase):
@@ -40,3 +40,17 @@ class ModelTester(unittest.TestCase):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
         self.assertIsInstance(response.context['bio'], Contact)
+
+    def test_request_spy(self):
+        """
+        test_request_spy for testing spy. Can be start separate.
+        Checking status code, and MyMiddle.objects.
+        """
+        response = self.client.get('/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.templates[0].name, 'index.html')
+        watched = MyMiddle.objects.filter(watched=False)
+        self.assertNotEqual(watched.__len__(), 0)
+        response = self.client.get('/spy/')
+        watched = MyMiddle.objects.filter(watched=False)
+        self.assertEqual(watched.__len__(), 0)
