@@ -7,7 +7,6 @@ can be start as separare test
 
 from django.test.client import Client
 import unittest
-from django.contrib.auth.models import User
 
 from apps.contact.models import Contact, MyMiddle
 
