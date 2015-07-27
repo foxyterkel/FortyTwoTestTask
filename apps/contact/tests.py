@@ -16,18 +16,6 @@ class ModelTester(unittest.TestCase):
 
     def setUp(self):
         self.client = Client()
-        User.objects.create(username='admin', password='admin')
-        Contact.objects.create(first_name='Sergii', last_name='Vanzha',
-                               birth_date='1991-01-19',
-                               contacts='+380662352011',
-                               bio='My little story.',
-                               email='terkel919@gmail.com',
-                               jaber='example@42.cc', skype='example',
-                               other_contacts='city Poltava. Parkova 1a st.')
-
-    def tearDown(self):
-        Contact.objects.all().delete()
-        User.objects.all().delete()
 
     def test_main(self):
         """
@@ -61,4 +49,4 @@ class ModelTester(unittest.TestCase):
         """
         response = self.client.post('/account/login/', {'username': 'admin',
                                                         'password': 'admin'})
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
