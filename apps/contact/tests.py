@@ -54,3 +54,11 @@ class ModelTester(unittest.TestCase):
         response = self.client.get('/spy/')
         watched = MyMiddle.objects.filter(watched=False)
         self.assertEqual(watched.__len__(), 0)
+
+    def test_auth(self):
+        """
+        Authentication test
+        """
+        response = self.client.post('/account/login/', {'username': 'admin',
+                                                        'password': 'admin'})
+        self.assertEqual(response.status_code, 200)
