@@ -8,6 +8,7 @@ from io import BytesIO
 import base64
 import uuid
 import re
+from django.http import Http404
 
 from apps.contact.models import Contact, MyMiddle
 from fortytwo_test_task.settings import EMAIL_FOR_MAIN_PAGE, IMAGE_SIZE
@@ -16,8 +17,11 @@ from apps.contact.forms import EditForm
 
 class Main(View):
     def get(self, request):
-        bio = Contact.objects.get(email=EMAIL_FOR_MAIN_PAGE)
-        return render(request, 'index.html', {'bio': bio})
+        try:
+            bio = Contact.objects.get(email=EMAIL_FOR_MAIN_PAGE)
+            return render(request, 'index.html', {'bio': bio})
+        except:
+            raise Http404
 
 
 class RequestSpy(View):

@@ -53,7 +53,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'apps.contact.MyMiddleWare.MyMiddleWare',
+    'apps.contact.mymiddle.MyMiddleWare',
 
 )
 
@@ -120,8 +120,8 @@ STATICFILES_DIRS = (
 
 # Template Settings
 TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'apps/contact/templates'),
     os.path.join(BASE_DIR, 'templates'),
+    os.path.join(BASE_DIR, 'apps/contact/templates'),
 )
 
 # Turn off south during test
