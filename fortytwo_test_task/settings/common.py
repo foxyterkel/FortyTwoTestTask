@@ -53,7 +53,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'apps.contact.MyMiddleWare.MyMiddleWare',
+    'apps.contact.mymiddle.MyMiddleWare',
 
 )
 
@@ -120,8 +120,8 @@ STATICFILES_DIRS = (
 
 # Template Settings
 TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'apps/contact/templates'),
     os.path.join(BASE_DIR, 'templates'),
+    os.path.join(BASE_DIR, 'apps/contact/templates'),
 )
 
 # Turn off south during test
@@ -130,3 +130,25 @@ EMAIL_FOR_MAIN_PAGE = 'terkel919@gmail.com'
 IMAGE_SIZE = (200, 200)
 LOGIN_REDIRECT_URL = '/edit/'
 FIXTURE_DIRS = (os.path.join(BASE_DIR, 'fixtures'),)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'loggers': {
+        'apps.contact.views': {
+            'handlers': ['file', ],
+            'level': 'INFO'
+        },
+        'apps.contact.views': {
+            'handlers': ['file', ],
+            'level': 'DEBUG'
+        }
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/debug.log')
+        }
+    }
+}
