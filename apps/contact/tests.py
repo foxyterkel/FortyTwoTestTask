@@ -95,7 +95,7 @@ class ModelTester(unittest.TestCase):
 
     def test_auth(self):
         """
-        Authentication test
+        Authentication test.
         """
         response = self.client.post('/account/login/', {'username': 'admin',
                                                         'password': 'admin'})
