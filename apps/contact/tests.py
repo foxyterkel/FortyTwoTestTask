@@ -112,7 +112,7 @@ class ModelTester(unittest.TestCase):
 
     def test_editor(self):
         """
-        Testing edit page
+        Testing edit page.
         """
         responce = self.client.get('/edit/')
         self.assertEqual(responce.status_code, 200)
