@@ -20,9 +20,9 @@ class Contact(models.Model):
     bio = models.TextField(max_length=250,
                            validators=[MinLengthValidator(10), ])
     email = models.EmailField(validators=[validate_email, ], unique=True)
-    jaber = models.CharField(max_length=100, unique=True,
-                             default='example@mail.ru', blank=True)
-    skype = models.CharField(max_length=100, unique=True, default='example',
+    jaber = models.CharField(max_length=100, default='example@mail.ru',
+                             blank=True)
+    skype = models.CharField(max_length=100, default='example',
                              blank=True)
     other_contacts = models.TextField(max_length=250, blank=True)
     photo = models.ImageField(upload_to=generate_path, blank=True)
