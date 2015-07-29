@@ -7,8 +7,6 @@ can be start as separare test
 
 from django.test.client import Client
 import unittest
-from django.contrib.auth.models import User
-from django.utils import timezone
 import re
 
 
@@ -129,5 +127,6 @@ class ModelTester(unittest.TestCase):
 
     def create_other_user(self):
         Contact.objects.create(first_name='Andrii', last_name='Vanzha',
-                               email='andrii@mail.ru', contacts='+380662453012',
+                               email='andrii@mail.ru',
+                               contacts='+380662453012',
                                bio='His little story!')

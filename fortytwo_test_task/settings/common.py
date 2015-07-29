@@ -130,3 +130,25 @@ EMAIL_FOR_MAIN_PAGE = 'terkel919@gmail.com'
 IMAGE_SIZE = (200, 200)
 LOGIN_REDIRECT_URL = '/edit/'
 FIXTURE_DIRS = (os.path.join(BASE_DIR, 'fixtures'),)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'loggers': {
+        'apps.contact.views': {
+            'handlers': ['file', ],
+            'level': 'INFO'
+        },
+        'apps.contact.views': {
+            'handlers': ['file', ],
+            'level': 'DEBUG'
+        }
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/debug.log')
+        }
+    }
+}

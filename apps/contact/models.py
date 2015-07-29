@@ -2,8 +2,6 @@ from django.db import models
 from django.utils import timezone
 from django.core.validators import validate_email, MinLengthValidator, \
     RegexValidator
-from django.db.models.signals import post_save, post_delete, post_init
-from apps.contact.signals import my_receiver
 
 
 def generate_path(self, filename):
@@ -41,8 +39,3 @@ class MyMiddle(models.Model):
 
     class Meta:
         ordering = ['-created_at', ]
-
-post_init.connect(my_receiver, dispatch_uid="my_unique_identifier",
-                  sender=(Contact))
-# post_save.connect(my_receiver, dispatch_uid="my_unique_identifier")
-# post_delete.connect(my_receiver, dispatch_uid="my_unique_identifier")
