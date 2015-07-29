@@ -95,7 +95,7 @@ class ModelTester(unittest.TestCase):
 
     def test_auth(self):
         """
-        Authentication test.
+        Authentication test. Can be start separate.
         """
         response = self.client.post('/account/login/', {'username': 'admin',
                                                         'password': 'admin'})
