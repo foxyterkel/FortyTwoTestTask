@@ -82,7 +82,7 @@ class ModelTester(unittest.TestCase):
     def test_request_spy(self):
         """
         test_request_spy for testing spy. Can be start separate.
-        Checking status code, and MyMiddle.objects.
+        Checking status code, and MyMiddle.objects. Can be start separate.
         """
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
