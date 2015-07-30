@@ -54,6 +54,8 @@ class ModelTester(unittest.TestCase):
         response = self.client.get('/')
         self.assertIn('Sergii', response.content)
         self.assertIn('terkel919@gmail.com', response.content)
+        self.assertNotIn('Andrii', response.content)
+        self.assertNotIn('andrii@mail.ru', response.content)
 
     def test_main_page_with_zero_entry(self):
         """
