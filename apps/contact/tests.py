@@ -94,6 +94,7 @@ class ModelTester(unittest.TestCase):
         response = self.client.get('/spy/')
         watched = MyMiddle.objects.filter(watched=False)
         self.assertEqual(watched.__len__(), 0)
+        self.assertIn('/spy/', response.content)
 
     def test_auth(self):
         """
