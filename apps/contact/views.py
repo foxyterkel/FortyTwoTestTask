@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, get_object_or_404
 from django.views.generic import View
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import json
@@ -50,7 +50,7 @@ class Updater(View):
 
 class Editor(View):
     def get(self, request):
-        filing = Contact.objects.get(email=EMAIL_FOR_MAIN_PAGE)
+        filing = get_object_or_404(Contact, email=EMAIL_FOR_MAIN_PAGE)
         form = EditForm(instance=filing)
         photo = filing.photo
         return render(request, 'edit.html', {'form': form, 'photo': photo})

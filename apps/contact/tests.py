@@ -9,8 +9,9 @@ from django.test.client import Client
 import unittest
 import re
 
+from fortytwo_test_task.settings import EMAIL_FOR_MAIN_PAGE
 from apps.contact.forms import EditForm
-from apps.contact.models import Contact, MyMiddle
+from apps.contact.models import Contact, MyMiddle, Signal
 from apps.contact.templatetags.admin_editor import admin_editor_url
 
 
@@ -56,6 +57,8 @@ class ModelTester(unittest.TestCase):
         self.assertIn('terkel919@gmail.com', response.content)
         self.assertNotIn('Andrii', response.content)
         self.assertNotIn('andrii@mail.ru', response.content)
+        Contact.objects.all().delete()
+        self.restore_user()
 
     def test_main_page_with_zero_entry(self):
         """
@@ -140,7 +143,7 @@ class ModelTester(unittest.TestCase):
     def test_request_spy_entry(self):
         """
         test_request_spy for testing spy. Can be start separate.
-        Checking status code, and MyMiddle. All watched.
+        Checking status code, and MyMiddle. testing entry.
         """
         self.client.get('/admin/')
         self.client.get('/edit/')
@@ -148,7 +151,7 @@ class ModelTester(unittest.TestCase):
         self.assertIn('/admin/', response.content)
         self.assertIn('/edit/', response.content)
 
-    def test_auth(self):
+    def test_auth_pass(self):
         """
         Authentication test. Can be start separate.
         """
@@ -156,7 +159,56 @@ class ModelTester(unittest.TestCase):
                                                         'password': 'admin'})
         self.assertEqual(response.status_code, 302)
 
-    def test_admin_editor(self):
+    def test_auth_fail(self):
+        """
+        Authentication test. Can be start separate.
+        """
+        response = self.client.post('/account/login/', {'username': 'admyn',
+                                                        'password': 'admin'})
+        self.assertEqual(response.status_code, 200)
+
+    def test_editor_with_sergii(self):
+        """
+        Testing edit page.
+        """
+        responce = self.client.get('/edit/')
+        self.assertEqual(responce.status_code, 200)
+        self.assertIsInstance(responce.context['form'], EditForm)
+        self.assertIn('Sergii', responce.content)
+
+    def test_editor_without_sergii(self):
+        """
+        Testing edit page.
+        """
+        Contact.objects.all().delete()
+        responce = self.client.get('/edit/')
+        self.assertIn('Page Not Found', responce.content)
+        self.restore_user()
+
+    def test_editor_without_sergii_rename(self):
+        """
+        Testing edit page.
+        """
+        sergii = Contact.objects.get(email=EMAIL_FOR_MAIN_PAGE)
+        sergii.first_name = 'Andrii'
+        sergii.save()
+        responce = self.client.get('/edit/')
+        self.assertIn('Andrii', responce.content)
+        Contact.objects.all().delete()
+        self.restore_user()
+
+    def test_editor_without_andrii(self):
+        """
+        Testing edit page.
+        """
+        Contact.objects.all().delete()
+        self.create_other_user()
+        responce = self.client.get('/edit/')
+        self.assertIn('Page Not Found', responce.content)
+        Contact.objects.all().delete()
+        self.restore_user()
+
+    def test_admin_editor_contact(self):
         """
         Testing castom template tags.
         """
@@ -165,13 +217,47 @@ class ModelTester(unittest.TestCase):
         responce = self.client.get(url)
         self.assertEqual(responce.status_code, 200)
 
-    def test_editor(self):
+    def test_admin_editor_middle(self):
         """
-        Testing edit page.
+        Testing castom template tags.
         """
-        responce = self.client.get('/edit/')
+        middle = MyMiddle.objects.all()[0]
+        url = re.search("href=(\S+)>", admin_editor_url(middle)).group(1)
+        responce = self.client.get(url)
         self.assertEqual(responce.status_code, 200)
-        self.assertIsInstance(responce.context['form'], EditForm)
+
+    def test_signal_create(self):
+        """
+        testing signal create.
+        """
+        self.create_other_user()
+        count = Signal.objects.all().__len__()
+        self.assertNotEqual(count, 0)
+        latest = Signal.objects.last()
+        self.assertEqual(latest.action, 'create')
+        Contact.objects.all().delete()
+        self.restore_user()
+
+    def test_signal_delete(self):
+        """
+        testing signal delete.
+        """
+        Contact.objects.all().delete()
+        latest = Signal.objects.last()
+        self.assertEqual(latest.action, 'delete')
+        self.restore_user()
+
+    def test_signal_save(self):
+        """
+        testing signal save.
+        """
+        sergii = Contact.objects.get(email=EMAIL_FOR_MAIN_PAGE)
+        sergii.first_name = 'Andrii'
+        sergii.save()
+        latest = Signal.objects.last()
+        self.assertEqual(latest.action, 'save')
+        Contact.objects.all().delete()
+        self.restore_user()
 
     def restore_user(self):
         Contact.objects.create(first_name='Sergii', last_name='Vanza',
