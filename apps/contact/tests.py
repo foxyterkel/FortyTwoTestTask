@@ -81,7 +81,7 @@ class ModelTester(unittest.TestCase):
         Contact.objects.all().delete()
         self.restore_user()
 
-    def test_request_spy(self):
+    def test_request_spy_for_creating(self):
         """
         test_request_spy for testing spy. Can be start separate.
         Checking status code, and MyMiddle.objects. Can be start separate.
@@ -91,10 +91,62 @@ class ModelTester(unittest.TestCase):
         self.assertEqual(response.templates[0].name, 'index.html')
         watched = MyMiddle.objects.filter(watched=False)
         self.assertNotEqual(watched.__len__(), 0)
+
+    def test_request_spy_for_marking(self):
+        """
+        test_request_spy for testing spy. Can be start separate.
+        Checking status code, and MyMiddle.objects marking.
+        """
+
         response = self.client.get('/spy/')
         watched = MyMiddle.objects.filter(watched=False)
         self.assertEqual(watched.__len__(), 0)
         self.assertIn('/spy/', response.content)
+
+    def test_request_spy_empty_middle(self):
+        """
+        test_request_spy for testing spy. Can be start separate.
+        Checking status code, and MyMiddle. Empty middle.
+        """
+        MyMiddle.objects.all().delete()
+        response = self.client.get('/spy/')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('/spy/', response.content)
+
+    def test_request_spy_all_watched(self):
+        """
+        test_request_spy for testing spy. Can be start separate.
+        Checking status code, and MyMiddle. All watched.
+        """
+        for i in MyMiddle.objects.all():
+            i.watched = False
+            i.save()
+        response = self.client.get('/spy/')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('/spy/', response.content)
+
+    def test_request_spy_all_unwatched(self):
+        """
+        test_request_spy for testing spy. Can be start separate.
+        Checking status code, and MyMiddle. All unwatched.
+        """
+        for i in MyMiddle.objects.all():
+            i.watched = True
+            i.save()
+        response = self.client.get('/spy/')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('/spy/', response.content)
+
+    def test_request_spy_entry(self):
+        """
+        test_request_spy for testing spy. Can be start separate.
+        Checking status code, and MyMiddle. All watched.
+        """
+        self.client.get('/admin/')
+        self.client.get('/edit/')
+        response = self.client.get('/spy/')
+        self.assertIn('/admin/', response.content)
+        self.assertIn('/edit/', response.content)
 
     def test_auth(self):
         """
