@@ -33,7 +33,7 @@ class Contact(models.Model):
         return '%s %s' % (self.first_name, self.last_name)
 
 
-class MyMiddle(models.Model):
+class RequestEntry(models.Model):
     body = models.CharField(max_length=250)
     watched = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True, editable=False,

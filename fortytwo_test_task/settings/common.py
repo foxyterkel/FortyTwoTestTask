@@ -129,7 +129,6 @@ SOUTH_TESTS_MIGRATE = False
 EMAIL_FOR_MAIN_PAGE = 'terkel919@gmail.com'
 IMAGE_SIZE = (200, 200)
 LOGIN_REDIRECT_URL = '/edit/'
-FIXTURE_DIRS = (os.path.join(BASE_DIR, 'fixtures'),)
 
 LOGGING = {
     'version': 1,

@@ -10,8 +10,9 @@ import uuid
 import re
 from django.http import Http404
 import logging
+from django.core.exceptions import ObjectDoesNotExist
 
-from apps.contact.models import Contact, MyMiddle
+from apps.contact.models import Contact, RequestEntry
 from fortytwo_test_task.settings import EMAIL_FOR_MAIN_PAGE, IMAGE_SIZE
 from apps.contact.forms import EditForm
 
@@ -25,23 +26,23 @@ class Main(View):
             bio = Contact.objects.get(email=EMAIL_FOR_MAIN_PAGE)
             logr.debug(bio)
             return render(request, 'index.html', {'bio': bio})
-        except:
+        except ObjectDoesNotExist:
             raise Http404
 
 
 class RequestSpy(View):
     def get(self, request):
-        unmarked = MyMiddle.objects.filter(watched=False)
+        unmarked = RequestEntry.objects.filter(watched=False)
         for i in unmarked:
             i.watched = True
             i.save()
-        ten_request = MyMiddle.objects.all()[:10]
+        ten_request = RequestEntry.objects.all()[:10]
         return render(request, 'request.html', {'ten_request': ten_request})
 
 
 class Updater(View):
     def get(self, request):
-        unmarked = MyMiddle.objects.filter(watched=False)
+        unmarked = RequestEntry.objects.filter(watched=False)
         if unmarked:
             return HttpResponse(unmarked.__len__())
         else:
