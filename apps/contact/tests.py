@@ -22,16 +22,16 @@ class ModelTester(unittest.TestCase):
 
     def test_main(self):
         """
-        test_main for testing entry in base. Can be start separate.
+        test_main for testing entry in base.
         """
 
         contact = Contact.objects.all()
         self.assertEqual(contact.__len__(), 1)
         self.assertEqual(contact[0].first_name, 'Sergii')
 
-    def test_main_content(self):
+    def test_main_context(self):
         """
-        test_main_content for testing main page context. Can be start separate.
+        Testing main page status code, and page context.
         """
 
         response = self.client.get('/')
@@ -40,7 +40,7 @@ class ModelTester(unittest.TestCase):
 
     def test_main_page(self):
         """
-        test_main_page for testing main page. Can be start separate.
+        test_main_page for testing main page. 
         """
         response = self.client.get('/')
         self.assertIn('Sergii', response.content)
@@ -49,7 +49,7 @@ class ModelTester(unittest.TestCase):
     def test_main_page_with_two_entry(self):
         """
         test_main_page for testing main page. When 2 entry in base.
-        Can be start separate.
+        
         """
         self.create_other_user()
         response = self.client.get('/')
@@ -63,7 +63,7 @@ class ModelTester(unittest.TestCase):
     def test_main_page_with_zero_entry(self):
         """
         test_main_page for testing main page. When no entry in base.
-        Can be start separate.
+        
         """
 
         Contact.objects.all().delete()
@@ -74,7 +74,7 @@ class ModelTester(unittest.TestCase):
     def test_main_page_with_wrong_email(self):
         """
         test_main_page for testing main page. When in base one entry,
-        but wrong email. Can be start separate.
+        but wrong email. 
         """
 
         Contact.objects.all().delete()
@@ -86,8 +86,8 @@ class ModelTester(unittest.TestCase):
 
     def test_request_spy_for_creating(self):
         """
-        test_request_spy for testing spy. Can be start separate.
-        Checking status code, and MyMiddle.objects. Can be start separate.
+        test_request_spy for testing spy. 
+        Checking status code, and MyMiddle.objects. 
         """
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
@@ -97,7 +97,7 @@ class ModelTester(unittest.TestCase):
 
     def test_request_spy_for_marking(self):
         """
-        test_request_spy for testing spy. Can be start separate.
+        test_request_spy for testing spy. 
         Checking status code, and MyMiddle.objects marking.
         """
 
@@ -108,7 +108,7 @@ class ModelTester(unittest.TestCase):
 
     def test_request_spy_empty_middle(self):
         """
-        test_request_spy for testing spy. Can be start separate.
+        test_request_spy for testing spy. 
         Checking status code, and MyMiddle. Empty middle.
         """
         MyMiddle.objects.all().delete()
@@ -118,7 +118,7 @@ class ModelTester(unittest.TestCase):
 
     def test_request_spy_all_watched(self):
         """
-        test_request_spy for testing spy. Can be start separate.
+        test_request_spy for testing spy. 
         Checking status code, and MyMiddle. All watched.
         """
         for i in MyMiddle.objects.all():
@@ -130,7 +130,7 @@ class ModelTester(unittest.TestCase):
 
     def test_request_spy_all_unwatched(self):
         """
-        test_request_spy for testing spy. Can be start separate.
+        test_request_spy for testing spy. 
         Checking status code, and MyMiddle. All unwatched.
         """
         for i in MyMiddle.objects.all():
@@ -142,7 +142,7 @@ class ModelTester(unittest.TestCase):
 
     def test_request_spy_entry(self):
         """
-        test_request_spy for testing spy. Can be start separate.
+        test_request_spy for testing spy. 
         Checking status code, and MyMiddle. testing entry.
         """
         self.client.get('/admin/')
@@ -153,7 +153,7 @@ class ModelTester(unittest.TestCase):
 
     def test_auth_pass(self):
         """
-        Authentication test. Can be start separate.
+        Authentication test. 
         """
         response = self.client.post('/account/login/', {'username': 'admin',
                                                         'password': 'admin'})
@@ -161,7 +161,7 @@ class ModelTester(unittest.TestCase):
 
     def test_auth_fail(self):
         """
-        Authentication test. Can be start separate.
+        Authentication test. 
         """
         response = self.client.post('/account/login/', {'username': 'admyn',
                                                         'password': 'admin'})
