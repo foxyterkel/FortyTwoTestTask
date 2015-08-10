@@ -13,7 +13,7 @@ import logging
 from django.core.exceptions import ObjectDoesNotExist
 
 from apps.contact.models import Contact, RequestEntry
-from fortytwo_test_task.settings import EMAIL_FOR_MAIN_PAGE, IMAGE_SIZE
+from django.conf import settings
 from apps.contact.forms import EditForm
 
 logr = logging.getLogger(__name__)
@@ -23,11 +23,11 @@ class Main(View):
     def get(self, request):
         logr.info(request.path)
         try:
-            bio = Contact.objects.get(email=EMAIL_FOR_MAIN_PAGE)
-            logr.debug(bio)
-            return render(request, 'index.html', {'bio': bio})
+            bio = Contact.objects.get(email=settings.EMAIL_FOR_MAIN_PAGE)
         except ObjectDoesNotExist:
             raise Http404
+        logr.debug(bio)
+        return render(request, 'index.html', {'bio': bio})
 
 
 class RequestSpy(View):
@@ -51,7 +51,7 @@ class Updater(View):
 
 class Editor(View):
     def get(self, request):
-        filing = get_object_or_404(Contact, email=EMAIL_FOR_MAIN_PAGE)
+        filing = get_object_or_404(Contact, email=settings.EMAIL_FOR_MAIN_PAGE)
         form = EditForm(instance=filing)
         photo = filing.photo
         return render(request, 'edit.html', {'form': form, 'photo': photo})
@@ -63,7 +63,7 @@ class Editor(View):
         new_data = {}
         for i in data:
             new_data[i['name']] = i['value']
-        id = Contact.objects.get(email=EMAIL_FOR_MAIN_PAGE)
+        id = Contact.objects.get(email=settings.EMAIL_FOR_MAIN_PAGE)
         edit_form = EditForm(new_data, instance=id)
         if edit_form.is_valid():
             edit_form.save()
@@ -80,7 +80,7 @@ def prepare_picture(json_data):
     ext_info, ready_data = data.split(',')
     ext = re.search('image/(\w+);', ext_info).group(1)
     image = Image.open(BytesIO(base64.b64decode(ready_data)))
-    image.thumbnail(IMAGE_SIZE, Image.ANTIALIAS)
+    image.thumbnail(settings.IMAGE_SIZE, Image.ANTIALIAS)
     photo_io = StringIO.StringIO()
     image.save(photo_io, format='%s' % (ext))
     photo_file = InMemoryUploadedFile(photo_io, 'photo', generate_name(ext),

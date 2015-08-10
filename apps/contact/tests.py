@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Django unit test for project fortytwo_test_task
 Making client and superuser in setUp
@@ -40,13 +41,13 @@ class Tester(TestCase):
         """
 
         Contact.objects.all().delete()
-        Contact.objects.create(first_name=u'Sergii', last_name=u'Vanzha',
+        Contact.objects.create(first_name=u'Їжак', last_name=u'Євлампій',
                                email=u'terkel919@gmail.com',
                                contacts=u'+380662352011',
                                bio=u'My little story!')
         response = self.client.get('/')
-        self.assertIn('Sergii', response.content)
-        self.assertIn('Vanzha', response.content)
+        self.assertIn('Їжак', response.content)
+        self.assertIn('Євлампій', response.content)
         self.assertIn('+380662352011', response.content)
         self.assertIn('My little story', response.content)
         self.assertIn('terkel919@gmail.com', response.content)
@@ -82,6 +83,7 @@ class Tester(TestCase):
         Contact.objects.all().delete()
         response = self.client.get('/')
         self.assertIn('Page Not Found', response.content)
+        self.assertEqual(response.status_code, 404)
 
     def test_main_page_with_wrong_email(self):
         """
@@ -93,6 +95,7 @@ class Tester(TestCase):
         self.create_other_user()
         response = self.client.get('/')
         self.assertIn('Page Not Found', response.content)
+        self.assertEqual(response.status_code, 404)
 
     def test_request_spy_for_creating(self):
         """
