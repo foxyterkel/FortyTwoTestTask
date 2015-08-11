@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    {% load staticfiles %}
-	<title>
+    <title>
     {% block header %} Test for 42cup 
     {% endblock %}
     </title>
+    {% load staticfiles %}
     <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link  rel="stylesheet" href={% static 'css/style.css' %}>
+    {% block extra_static %}
+    {% endblock %}
 </head>
 <body>
 	<nav class='navbar navbar-default'>

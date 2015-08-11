@@ -1,20 +1,24 @@
 {% extends 'base.html' %}
  
+{% block extra_static %}
+    {% load staticfiles %}
+    <script src={% static "js/spyscript.js" %}></script>
+{% endblock %}
+
+
 {% block header%}
 (0) new request
 {% endblock %} 
 {% block content %}
     <h2 class="col-md-8"><span class='label label-default' id="spy">0</span> new request</h2>
 	<div class="col-md-8">
-    {% for i in ten_request %}
+    {% for i in last_requests %}
         <div class="panel panel-default">
         	<div class="panel-heading">At {{ i.created_at }}</div> 
-        	<div class="panel-body">{{ i.body }}</div>
+        	<div class="panel-body">{{ i.url_path }}</div>
         </div>
     {% endfor %}
     </div>
 
-    {% load staticfiles %}
-    <script src={% static "js/spyscript.js" %}></script>
 
 {% endblock %}

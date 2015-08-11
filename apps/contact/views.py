@@ -32,21 +32,17 @@ class Main(View):
 
 class RequestSpy(View):
     def get(self, request):
-        unmarked = RequestEntry.objects.filter(watched=False)
-        for i in unmarked:
+        for i in RequestEntry.objects.filter(watched=False):
             i.watched = True
             i.save()
-        ten_request = RequestEntry.objects.all()[:10]
-        return render(request, 'request.html', {'ten_request': ten_request})
+        last_requests = RequestEntry.objects.all()[:10]
+        return render(request, 'request.html', {'last_requests': last_requests})
 
 
 class Updater(View):
     def get(self, request):
         unmarked = RequestEntry.objects.filter(watched=False)
-        if unmarked:
-            return HttpResponse(unmarked.__len__())
-        else:
-            return HttpResponse(0)
+        return HttpResponse(len(unmarked))
 
 
 class Editor(View):
