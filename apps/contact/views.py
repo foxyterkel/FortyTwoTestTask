@@ -36,6 +36,7 @@ class RequestSpy(View):
             i.watched = True
             i.save()
         last_requests = RequestEntry.objects.all()[:10]
+        logr.debug([i.url_path for i in last_requests])
         return render(request, 'request.html', {'last_requests': last_requests})
 
 
