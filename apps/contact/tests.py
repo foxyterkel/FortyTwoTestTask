@@ -8,15 +8,11 @@ can be start as separare test
 
 from django.test import TestCase
 import re
-import logging
 
 from django.conf import settings
 from apps.contact.forms import EditForm
 from apps.contact.models import Contact, RequestEntry, Signal
 from apps.contact.templatetags.admin_editor import admin_editor_url
-
-
-logging.disable(logging.CRITICAL)
 
 
 class MainTester(TestCase):
