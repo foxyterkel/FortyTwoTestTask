@@ -9,7 +9,7 @@ can be start as separare test
 from django.test import TestCase
 import re
 
-from fortytwo_test_task.settings import EMAIL_FOR_MAIN_PAGE
+from django.conf import settings
 from apps.contact.forms import EditForm
 from apps.contact.models import Contact, RequestEntry, Signal
 from apps.contact.templatetags.admin_editor import admin_editor_url
@@ -227,7 +227,7 @@ class EditorTester(TestCase):
         """
         Testing edit page.
         """
-        sergii = Contact.objects.get(email=EMAIL_FOR_MAIN_PAGE)
+        sergii = Contact.objects.get(email=settings.EMAIL_FOR_MAIN_PAGE)
         sergii.first_name = 'Andrii'
         sergii.save()
         responce = self.client.get('/edit/')
@@ -285,7 +285,7 @@ class SignalTester(TestCase):
         """
         testing signal save.
         """
-        sergii = Contact.objects.get(email=EMAIL_FOR_MAIN_PAGE)
+        sergii = Contact.objects.get(email=settings.EMAIL_FOR_MAIN_PAGE)
         sergii.first_name = 'Andrii'
         sergii.save()
         latest = Signal.objects.last()
