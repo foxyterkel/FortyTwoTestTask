@@ -15,7 +15,7 @@ from apps.contact.models import Contact, RequestEntry, Signal
 from apps.contact.templatetags.admin_editor import admin_editor_url
 
 
-class Tester(TestCase):
+class MainTester(TestCase):
 
     def test_main(self):
         """
@@ -68,7 +68,7 @@ class Tester(TestCase):
         test_main_page for testing main page. When 2 entry in base.
 
         """
-        self.create_other_user()
+        create_other_user()
         response = self.client.get('/')
         self.assertIn('Sergii', response.content)
         self.assertIn('terkel919@gmail.com', response.content)
@@ -92,37 +92,40 @@ class Tester(TestCase):
         """
 
         Contact.objects.all().delete()
-        self.create_other_user()
+        create_other_user()
         response = self.client.get('/')
         self.assertIn('Page Not Found', response.content)
         self.assertEqual(response.status_code, 404)
 
+
+class SpyTester(TestCase):
+
     def test_request_spy_for_creating(self):
         """
-        test_request_spy for testing spy.
-        Checking status code, and RequestEntry.objects.
+        Checking status code of the page, and increasing number of the
+        models entry after visiting 1 link.
         """
+        first_watched = len(RequestEntry.objects.filter(watched=False))
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.templates[0].name, 'index.html')
-        watched = RequestEntry.objects.filter(watched=False)
-        self.assertNotEqual(watched.__len__(), 0)
+        secound_watched = RequestEntry.objects.filter(watched=False)
+        self.assertEqual(len(secound_watched), first_watched+1)
 
     def test_request_spy_for_marking(self):
         """
-        test_request_spy for testing spy.
-        Checking status code, and RequestEntry.objects marking.
+        Checking status code of the spy page, and checking for unmarked
+        entrys after visiting spy page. Also cheking last url_path on the page.
         """
 
         response = self.client.get('/spy/')
         watched = RequestEntry.objects.filter(watched=False)
-        self.assertEqual(watched.__len__(), 0)
+        self.assertEqual(len(watched), 0)
         self.assertIn('/spy/', response.content)
 
     def test_request_spy_empty_middle(self):
         """
-        test_request_spy for testing spy.
-        Checking status code, and RequestEntry. Empty middle.
+        Checking status code of the spy page if ther is no entry in
+        request model.
         """
         RequestEntry.objects.all().delete()
         response = self.client.get('/spy/')
@@ -131,20 +134,8 @@ class Tester(TestCase):
 
     def test_request_spy_all_watched(self):
         """
-        test_request_spy for testing spy.
-        Checking status code, and RequestEntry. All watched.
-        """
-        for i in RequestEntry.objects.all():
-            i.watched = False
-            i.save()
-        response = self.client.get('/spy/')
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('/spy/', response.content)
-
-    def test_request_spy_all_unwatched(self):
-        """
-        test_request_spy for testing spy.
-        Checking status code, and RequestEntry. All unwatched.
+        Checking status code of the spy page if every entry in request model
+        already watched.
         """
         for i in RequestEntry.objects.all():
             i.watched = True
@@ -153,16 +144,48 @@ class Tester(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn('/spy/', response.content)
 
+    def test_request_spy_all_unwatched(self):
+        """
+        Checking status code of the spy page if every entry im request model
+        unwatched.
+        """
+        for i in RequestEntry.objects.all():
+            i.watched = False
+            i.save()
+        response = self.client.get('/spy/')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('/spy/', response.content)
+
     def test_request_spy_entry(self):
         """
-        test_request_spy for testing spy.
-        Checking status code, and RequestEntry. testing entry.
+        Cheking visited url_path on the page of spy.
         """
         self.client.get('/admin/')
         self.client.get('/edit/')
         response = self.client.get('/spy/')
         self.assertIn('/admin/', response.content)
         self.assertIn('/edit/', response.content)
+
+    def test_last_ten_request(self):
+        """
+        Ckeking number of request entrys in page context, also cheking
+        url_path of this entrys with last ten visited pages.
+        """
+        urls = ['/spy/', '/', '/admin/', '/edit/', '/spy/', '/', '/admin/',
+                '/edit/', '/']
+        for i in urls:
+            self.client.get(i)
+        responce = self.client.get('/spy/')
+        self.assertEqual(len(responce.context['last_requests']), 10)
+        urls.append('/spy/')
+        urls.reverse()
+        index = 0
+        for i in responce.context['last_requests']:
+            self.assertEquals(i.url_path, urls[index])
+            index += 1
+
+
+class AuthTester(TestCase):
 
     def test_auth_pass(self):
         """
@@ -179,6 +202,9 @@ class Tester(TestCase):
         response = self.client.post('/account/login/', {'username': 'admyn',
                                                         'password': 'admin'})
         self.assertEqual(response.status_code, 200)
+
+
+class EditorTester(TestCase):
 
     def test_editor_with_sergii(self):
         """
@@ -212,7 +238,7 @@ class Tester(TestCase):
         Testing edit page.
         """
         Contact.objects.all().delete()
-        self.create_other_user()
+        create_other_user()
         responce = self.client.get('/edit/')
         self.assertIn('Page Not Found', responce.content)
 
@@ -234,12 +260,15 @@ class Tester(TestCase):
         responce = self.client.get(url)
         self.assertEqual(responce.status_code, 200)
 
+
+class SignalTester(TestCase):
+
     def test_signal_create(self):
         """
         testing signal create.
         """
-        self.create_other_user()
-        count = Signal.objects.all().__len__()
+        create_other_user()
+        count = len(Signal.objects.all())
         self.assertNotEqual(count, 0)
         latest = Signal.objects.last()
         self.assertEqual(latest.action, 'create')
@@ -262,7 +291,8 @@ class Tester(TestCase):
         latest = Signal.objects.last()
         self.assertEqual(latest.action, 'save')
 
-    def create_other_user(self):
+
+def create_other_user():
         Contact.objects.create(first_name='Andrii', last_name='Vanzha',
                                email='andrii@mail.ru',
                                contacts='+380662453012',

@@ -2,8 +2,8 @@ __author__ = 'tyler'
 from apps.contact.models import RequestEntry
 
 
-class MyMiddleWare():
+class RequestSpyMiddleWare():
     def process_request(self, request):
         if not request.is_ajax():
-            RequestEntry.objects.create(body=request.path)
+            RequestEntry.objects.create(url_path=request.path)
         return None

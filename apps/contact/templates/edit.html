@@ -1,5 +1,14 @@
 {% extends 'base.html' %}
 
+
+{% block extra_static %}
+{% load staticfiles %}
+<img src={% static "images/ajax-loader.gif" %} id="loader">
+<script src={% static 'js/jquery.cookie.js' %}></script>
+<script src={% static 'js/jquery.json.js' %}></script>
+<script src={% static 'js/editor.js' %}></script>
+{% endblock %}
+
 {% block content %}
 {% if user.is_authenticated %}
 	<a class="btn btn-default col-md-1 col-md-offset-9 log" href="/account/logout/">Logout</a>
@@ -31,8 +40,4 @@
 		</div>
 
 
-<img src={% static "images/ajax-loader.gif" %} id="loader">
-<script src={% static 'js/jquery.cookie.js' %}></script>
-<script src={% static 'js/jquery.json.js' %}></script>
-<script src={% static 'js/editor.js' %}></script>
 {% endblock %}
