@@ -132,9 +132,6 @@ IMAGE_SIZE = (200, 200)
 LOGIN_REDIRECT_URL = '/edit/'
 
 
-if len(sys.argv) > 1 and sys.argv[1] == 'test':
-    logging.disable(logging.CRITICAL)
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
