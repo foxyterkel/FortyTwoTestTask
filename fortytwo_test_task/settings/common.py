@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 import sys
+import logging
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(__file__))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
@@ -129,6 +130,10 @@ SOUTH_TESTS_MIGRATE = False
 EMAIL_FOR_MAIN_PAGE = 'terkel919@gmail.com'
 IMAGE_SIZE = (200, 200)
 LOGIN_REDIRECT_URL = '/edit/'
+
+
+if len(sys.argv) > 1 and sys.argv[1] == 'test':
+    logging.disable(logging.CRITICAL)
 
 LOGGING = {
     'version': 1,

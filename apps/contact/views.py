@@ -32,12 +32,11 @@ class Main(View):
 
 class RequestSpy(View):
     def get(self, request):
-        for i in RequestEntry.objects.filter(watched=False):
-            i.watched = True
-            i.save()
+        RequestEntry.objects.filter(watched=False).update(watched=True)
         last_requests = RequestEntry.objects.all()[:10]
         logr.debug([i.url_path for i in last_requests])
-        return render(request, 'request.html', {'last_requests': last_requests})
+        return render(request, 'request.html', {'last_requests':
+                                                last_requests})
 
 
 class Updater(View):

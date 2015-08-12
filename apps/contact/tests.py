@@ -167,6 +167,10 @@ class SpyTester(TestCase):
         self.assertIn('/edit/', response.content)
 
     def test_last_ten_request(self):
+        """
+        Ckeking number of request entrys in page context, also cheking
+        url_path of this entrys with last ten visited pages.
+        """
         urls = ['/spy/', '/', '/admin/', '/edit/', '/spy/', '/', '/admin/',
                 '/edit/', '/']
         for i in urls:
