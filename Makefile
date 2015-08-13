@@ -1,8 +1,9 @@
 MANAGE=django-admin.py
 SETTINGS=fortytwo_test_task.settings
+TEST_SETTINGS=fortytwo_test_task.test_config
 
 test:
-	PYTHONPATH=`pwd` DJANGO_SETTINGS_MODULE=$(SETTINGS) $(MANAGE) test
+	PYTHONPATH=`pwd` DJANGO_SETTINGS_MODULE=$(TEST_SETTINGS) $(MANAGE) test
 	flake8 --exclude '*migrations*' apps fortytwo_test_task
 
 run:
