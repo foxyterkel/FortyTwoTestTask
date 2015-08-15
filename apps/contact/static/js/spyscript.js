@@ -27,10 +27,11 @@ function spy_active () {
   var intId = setInterval(function(){
     if (isFocus == true) {
         $.get('/updater-active/', function (data) {
-
           if (parseInt(data.number) > 0) {
             $.each(data.requests, function(index, el) {
-                $('#request_container div.panel:last').remove()
+                if ($('#request_container div.panel').length == 10){
+                    $('#request_container div.panel:last').remove()
+                }
                 $('#request_container').prepend('<div class="panel panel-default">\
                     <div class="panel-heading"> At '+el[1]+'</div>\
                     <div class="panel-body">'+el[0]+'</div></div>');
