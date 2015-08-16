@@ -8,6 +8,7 @@ can be start as separare test
 
 from django.test import TestCase
 import re
+from django.contrib.auth.models import User
 
 from django.conf import settings
 from apps.contact.forms import EditForm
@@ -16,6 +17,18 @@ from apps.contact.templatetags.admin_editor import admin_editor_url
 
 
 class MainTester(TestCase):
+
+    def setUp(self):
+        Contact.objects.create(first_name='Sergii', last_name='Vanzha',
+                               email='terkel919@gmail.com',
+                               contacts='+380662352011',
+                               bio='My little story')
+        User.objects.create_superuser(username='admin',
+                                      email='', password='admin')
+
+    def tearDown(self):
+        Contact.objects.all().delete()
+        User.objects.all().delete()
 
     def test_main(self):
         """
@@ -99,6 +112,18 @@ class MainTester(TestCase):
 
 
 class SpyTester(TestCase):
+
+    def setUp(self):
+        Contact.objects.create(first_name='Sergii', last_name='Vanzha',
+                               email='terkel919@gmail.com',
+                               contacts='+380662352011',
+                               bio='My little story')
+        User.objects.create_superuser(username='admin',
+                                      email='', password='admin')
+
+    def tearDown(self):
+        Contact.objects.all().delete()
+        User.objects.all().delete()
 
     def test_request_spy_for_creating(self):
         """
@@ -187,6 +212,18 @@ class SpyTester(TestCase):
 
 class AuthTester(TestCase):
 
+    def setUp(self):
+        Contact.objects.create(first_name='Sergii', last_name='Vanzha',
+                               email='terkel919@gmail.com',
+                               contacts='+380662352011',
+                               bio='My little story')
+        User.objects.create_superuser(username='admin',
+                                      email='', password='admin')
+
+    def tearDown(self):
+        Contact.objects.all().delete()
+        User.objects.all().delete()
+
     def test_auth_pass(self):
         """
         Authentication test.
@@ -205,6 +242,18 @@ class AuthTester(TestCase):
 
 
 class EditorTester(TestCase):
+
+    def setUp(self):
+        Contact.objects.create(first_name='Sergii', last_name='Vanzha',
+                               email='terkel919@gmail.com',
+                               contacts='+380662352011',
+                               bio='My little story')
+        User.objects.create_superuser(username='admin',
+                                      email='', password='admin')
+
+    def tearDown(self):
+        Contact.objects.all().delete()
+        User.objects.all().delete()
 
     def test_editor_with_sergii(self):
         """
@@ -255,6 +304,7 @@ class EditorTester(TestCase):
         """
         Testing castom template tags.
         """
+        self.client.get('/')
         middle = RequestEntry.objects.all()[0]
         url = re.search("href=(\S+)>", admin_editor_url(middle)).group(1)
         responce = self.client.get(url)
@@ -262,6 +312,18 @@ class EditorTester(TestCase):
 
 
 class SignalTester(TestCase):
+
+    def setUp(self):
+        Contact.objects.create(first_name='Sergii', last_name='Vanzha',
+                               email='terkel919@gmail.com',
+                               contacts='+380662352011',
+                               bio='My little story')
+        User.objects.create_superuser(username='admin',
+                                      email='', password='admin')
+
+    def tearDown(self):
+        Contact.objects.all().delete()
+        User.objects.all().delete()
 
     def test_signal_create(self):
         """
