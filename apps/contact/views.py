@@ -50,7 +50,9 @@ class UpdaterActive(View):
         unmarked = RequestEntry.objects.filter(watched=False)
         res = []
         for i in unmarked:
-            res.append([i.url_path, i.created_at.strftime('%b. %d, %Y, %H:%M')])
+            res.append([i.url_path,
+                       i.created_at.strftime('%b. %d, %Y, %H:%M')])
+        res.reverse()
         data = {'requests': res, 'number': len(unmarked)}
         RequestEntry.objects.filter(watched=False).update(watched=True)
         return HttpResponse(json.dumps(data), content_type='application/json')
