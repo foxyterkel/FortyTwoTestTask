@@ -8,7 +8,6 @@ can be start as separare test
 
 from django.test import TestCase
 import re
-from django.contrib.auth.models import User
 
 from django.conf import settings
 from apps.contact.forms import EditForm
