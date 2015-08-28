@@ -36,6 +36,7 @@ class Contact(models.Model):
 class RequestEntry(models.Model):
     url_path = models.CharField(max_length=250)
     watched = models.BooleanField(default=False)
+    priority = models.IntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True, editable=False,
                                       blank=True, null=True)
 
