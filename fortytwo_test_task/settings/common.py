@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps.contact',
+    'south',
     'bootstrapform',
     'apps.contact.templatetags.admin_editor',
 )
@@ -53,7 +54,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'apps.contact.mymiddle.MyMiddleWare',
+    'apps.contact.custom_middleware.RequestSpyMiddleWare',
 
 )
 
@@ -125,11 +126,11 @@ TEMPLATE_DIRS = (
 )
 
 # Turn off south during test
-SOUTH_TESTS_MIGRATE = False
+SOUTH_TESTS_MIGRATE = True
 EMAIL_FOR_MAIN_PAGE = 'terkel919@gmail.com'
 IMAGE_SIZE = (200, 200)
 LOGIN_REDIRECT_URL = '/edit/'
-FIXTURE_DIRS = (os.path.join(BASE_DIR, 'fixtures'),)
+
 
 LOGGING = {
     'version': 1,

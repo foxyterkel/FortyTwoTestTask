@@ -33,9 +33,10 @@ class Contact(models.Model):
         return '%s %s' % (self.first_name, self.last_name)
 
 
-class MyMiddle(models.Model):
-    body = models.CharField(max_length=250)
+class RequestEntry(models.Model):
+    url_path = models.CharField(max_length=250)
     watched = models.BooleanField(default=False)
+    priority = models.IntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True, editable=False,
                                       blank=True, null=True)
 
