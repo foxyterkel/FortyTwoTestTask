@@ -8,9 +8,7 @@ from io import BytesIO
 import base64
 import uuid
 import re
-from django.http import Http404
 import logging
-from django.core.exceptions import ObjectDoesNotExist
 
 from apps.contact.models import Contact, RequestEntry
 from django.conf import settings
@@ -22,10 +20,7 @@ logr = logging.getLogger(__name__)
 class Main(View):
     def get(self, request):
         logr.info(request.path)
-        try:
-            bio = Contact.objects.get(email=settings.EMAIL_FOR_MAIN_PAGE)
-        except ObjectDoesNotExist:
-            raise Http404
+        bio = get_object_or_404(Contact, email=settings.EMAIL_FOR_MAIN_PAGE)
         logr.debug(bio)
         return render(request, 'index.html', {'bio': bio})
 
