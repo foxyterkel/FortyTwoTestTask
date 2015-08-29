@@ -12,25 +12,26 @@
 (0) new request
 {% endblock %} 
 {% block content %}
-<div class="row">
-    <div class="col-md-3 col-md-offset-5">
-        <form class="form-inline" method="get" action="">
-            <div class="form-group">
-                <input type="text" class="form-control" id='number'>
-            </div>
-                <button type='submit' class="btn btn-default"> Set priority </button>  
-        </form>
+    <div class="page-header">
+        <h3> Showing requests with priority: <mark id='priority'>{{ priority }}</mark></h3>
+
+
+            <form class="form-inline" method="get" action="">
+                <div class="form-group">
+                    <input type="text" class="form-control" value="{{ priority }}" name='number'>
+                </div>
+                    <button type='submit' class="btn btn-default"> Set priority </button>  
+            </form>
     </div>
-</div>
 <div class="row">
 	<div class="col-md-8"  id='request_container'>
     {% for i in last_requests %}
         <div class="panel panel-default">
         	<div class="panel-heading">At {{ i.created_at|date:'M. j, o, H:i' }} 
-            <div class='pull-right'>Priority:<span id='label_{{ i.pk }}'> {{ i.priority}} </span>
-            <button class="btn btn-default btn-sm move-btn" data-name='{{i.pk}}' data-direct='up'>Up</button>
-            <button class="btn btn-default btn-sm move-btn" data-name='{{i.pk}}'data-direct='down'>Down</button>
-            </div>
+                <div class='pull-right'>Priority:<span id='label_{{ i.pk }}'> {{ i.priority}} </span>
+                    <button class="btn btn-default btn-sm move-btn" data-name='{{i.pk}}' data-direct='up'>Up</button>
+                    <button class="btn btn-default btn-sm move-btn" data-name='{{i.pk}}'data-direct='down'>Down</button>
+                </div>
             </div> 
         	<div class="panel-body">{{ i.url_path }}</div>
         </div>

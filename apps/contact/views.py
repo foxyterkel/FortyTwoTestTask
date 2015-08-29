@@ -33,11 +33,12 @@ class Main(View):
 class RequestSpy(View):
     def get(self, request):
         number = request.GET.get('number', 1)
+        print(number)
         if type(number) == 'str':
             number = int(number)
         request_set = RequestEntry.objects.filter(priority=number)
         request_set.filter(watched=False).update(watched=True)
-        last_requests = request_set.objects.all()[:10]
+        last_requests = request_set[:10]
         logr.debug([i.url_path for i in last_requests])
         return render(request, 'request.html', {'last_requests':
                                                 last_requests,
@@ -46,17 +47,21 @@ class RequestSpy(View):
 
 class UpdaterUnactive(View):
     def get(self, request):
-        unmarked = RequestEntry.objects.filter(watched=False)
+        priority = int(request.GET.get('priority'))
+        requ_set = RequestEntry.objects.filter(priority=priority)
+        unmarked = requ_set.filter(watched=False)
         return HttpResponse(len(unmarked))
 
 
 class UpdaterActive(View):
     def get(self, request):
-        unmarked = RequestEntry.objects.filter(watched=False)
+        priority = int(request.GET.get('priority'))
+        requ_set = RequestEntry.objects.filter(priority=priority)
+        unmarked = requ_set.filter(watched=False)
         res = []
         for i in unmarked:
             res.append([i.url_path,
-                       i.created_at.strftime('%b. %d, %Y, %H:%M')])
+                       i.created_at.strftime('%b. %d, %Y, %H:%M'), i.pk])
         res.reverse()
         data = {'requests': res, 'number': len(unmarked)}
         RequestEntry.objects.filter(watched=False).update(watched=True)
