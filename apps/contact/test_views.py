@@ -11,20 +11,11 @@ import re
 
 from django.conf import settings
 from apps.contact.forms import EditForm
-from apps.contact.models import Contact, RequestEntry, Signal
+from apps.contact.models import Contact, RequestEntry
 from apps.contact.templatetags.admin_editor import admin_editor_url
 
 
 class MainTester(TestCase):
-
-    def test_main(self):
-        """
-        test_main for testing entry in base.
-        """
-
-        contact = Contact.objects.all()
-        self.assertEqual(len(contact), 1)
-        self.assertEqual(contact[0].first_name, 'Sergii')
 
     def test_main_context(self):
         """
@@ -99,17 +90,6 @@ class MainTester(TestCase):
 
 
 class SpyTester(TestCase):
-
-    def test_request_spy_for_creating(self):
-        """
-        Checking status code of the page, and increasing number of the
-        models entry after visiting 1 link.
-        """
-        first_watched = len(RequestEntry.objects.filter(watched=False))
-        response = self.client.get('/')
-        self.assertEqual(response.status_code, 200)
-        secound_watched = RequestEntry.objects.filter(watched=False)
-        self.assertEqual(len(secound_watched), first_watched+1)
 
     def test_request_spy_for_marking(self):
         """
@@ -260,37 +240,6 @@ class EditorTester(TestCase):
         url = re.search("href=(\S+)>", admin_editor_url(middle)).group(1)
         responce = self.client.get(url)
         self.assertEqual(responce.status_code, 200)
-
-
-class SignalTester(TestCase):
-
-    def test_signal_create(self):
-        """
-        testing signal create.
-        """
-        create_other_user()
-        count = len(Signal.objects.all())
-        self.assertNotEqual(count, 0)
-        latest = Signal.objects.last()
-        self.assertEqual(latest.action, 'create')
-
-    def test_signal_delete(self):
-        """
-        testing signal delete.
-        """
-        Contact.objects.all().delete()
-        latest = Signal.objects.last()
-        self.assertEqual(latest.action, 'delete')
-
-    def test_signal_save(self):
-        """
-        testing signal save.
-        """
-        sergii = Contact.objects.get(email=settings.EMAIL_FOR_MAIN_PAGE)
-        sergii.first_name = 'Andrii'
-        sergii.save()
-        latest = Signal.objects.last()
-        self.assertEqual(latest.action, 'save')
 
 
 def create_other_user():
