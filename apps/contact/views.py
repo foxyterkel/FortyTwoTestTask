@@ -32,11 +32,16 @@ class Main(View):
 
 class RequestSpy(View):
     def get(self, request):
-        RequestEntry.objects.filter(watched=False).update(watched=True)
-        last_requests = RequestEntry.objects.all()[:10]
+        number = request.GET.get('number', 1)
+        if type(number) == 'str':
+            number = int(number)
+        request_set = RequestEntry.objects.filter(priority=number)
+        request_set.filter(watched=False).update(watched=True)
+        last_requests = request_set.objects.all()[:10]
         logr.debug([i.url_path for i in last_requests])
         return render(request, 'request.html', {'last_requests':
-                                                last_requests})
+                                                last_requests,
+                                                'priority': number})
 
 
 class UpdaterUnactive(View):
@@ -82,6 +87,19 @@ class Editor(View):
                 id.save()
             return HttpResponse('Saved! Your model was updated.')
         return HttpResponse(edit_form.errors)
+
+
+class UpdatePriority(View):
+    def post(self, request):
+        pk = request.POST.get('pk')
+        direct = request.POST.get('direct')
+        req_ent = RequestEntry.objects.get(pk=pk)
+        if direct == 'up':
+            req_ent.priority += 1
+        else:
+            req_ent.priority -= 1
+        req_ent.save()
+        return HttpResponse('done')
 
 
 def prepare_picture(json_data):
