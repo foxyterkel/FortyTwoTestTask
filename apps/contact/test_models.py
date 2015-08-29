@@ -53,7 +53,7 @@ class SignalTester(TestCase):
         """
         testing signal save.
         """
-        sergii = Contact.objects.get(email=settings.EMAIL_FOR_MAIN_PAGE)
+        sergii = Contact.objects.get(pk=settings.PK_MAIN_PAGE)
         sergii.first_name = 'Andrii'
         sergii.save()
         latest = Signal.objects.last()

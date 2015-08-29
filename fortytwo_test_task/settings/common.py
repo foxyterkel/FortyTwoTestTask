@@ -127,7 +127,7 @@ TEMPLATE_DIRS = (
 
 # Turn off south during test
 SOUTH_TESTS_MIGRATE = True
-EMAIL_FOR_MAIN_PAGE = 'terkel919@gmail.com'
+PK_MAIN_PAGE = 1
 IMAGE_SIZE = (200, 200)
 LOGIN_REDIRECT_URL = '/edit/'
 

@@ -76,18 +76,6 @@ class MainTester(TestCase):
         self.assertIn('Page Not Found', response.content)
         self.assertEqual(response.status_code, 404)
 
-    def test_main_page_with_wrong_email(self):
-        """
-        test_main_page for testing main page. When in base one entry,
-        but wrong email.
-        """
-
-        Contact.objects.all().delete()
-        create_other_user()
-        response = self.client.get('/')
-        self.assertIn('Page Not Found', response.content)
-        self.assertEqual(response.status_code, 404)
-
 
 class SpyTester(TestCase):
 
@@ -207,7 +195,7 @@ class EditorTester(TestCase):
         """
         Testing edit page.
         """
-        sergii = Contact.objects.get(email=settings.EMAIL_FOR_MAIN_PAGE)
+        sergii = Contact.objects.get(pk=settings.PK_MAIN_PAGE)
         sergii.first_name = 'Andrii'
         sergii.save()
         responce = self.client.get('/edit/')
@@ -220,7 +208,7 @@ class EditorTester(TestCase):
         Contact.objects.all().delete()
         create_other_user()
         responce = self.client.get('/edit/')
-        self.assertIn('Page Not Found', responce.content)
+        self.assertIn('Andrii', responce.content)
 
     def test_admin_editor_contact(self):
         """

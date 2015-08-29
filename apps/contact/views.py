@@ -20,7 +20,7 @@ logr = logging.getLogger(__name__)
 class Main(View):
     def get(self, request):
         logr.info(request.path)
-        bio = get_object_or_404(Contact, email=settings.EMAIL_FOR_MAIN_PAGE)
+        bio = get_object_or_404(Contact, pk=settings.PK_MAIN_PAGE)
         logr.debug(bio)
         return render(request, 'index.html', {'bio': bio})
 
@@ -65,7 +65,7 @@ class UpdaterActive(View):
 
 class Editor(View):
     def get(self, request):
-        filing = get_object_or_404(Contact, email=settings.EMAIL_FOR_MAIN_PAGE)
+        filing = get_object_or_404(Contact, pk=settings.PK_MAIN_PAGE)
         form = EditForm(instance=filing)
         photo = filing.photo
         return render(request, 'edit.html', {'form': form, 'photo': photo})
@@ -77,7 +77,7 @@ class Editor(View):
         new_data = {}
         for i in data:
             new_data[i['name']] = i['value']
-        id = Contact.objects.get(email=settings.EMAIL_FOR_MAIN_PAGE)
+        id = Contact.objects.get(pk=settings.PK_MAIN_PAGE)
         edit_form = EditForm(new_data, instance=id)
         if edit_form.is_valid():
             edit_form.save()
