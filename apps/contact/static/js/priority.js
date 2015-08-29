@@ -13,7 +13,7 @@ $(document).ready(function(){
         }
     });
 
-    $('.move-btn').on('click', function() {
+    function priority_handler () {
         pk = $(this).data('name');
         direct = $(this).data('direct');
         $.post('/move-priority/', {pk: pk, direct: direct}, function(data){
@@ -35,6 +35,9 @@ $(document).ready(function(){
             }
 
         })
-    })
+
+    }
+
+    $(document).on('click','.move-btn', priority_handler)
 
 });
