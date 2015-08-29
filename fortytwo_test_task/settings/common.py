@@ -114,7 +114,7 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'apps/contact/static'),
+    os.path.join(BASE_DIR, 'assets/contact'),
     os.path.join(BASE_DIR, 'assets'),
 )
 
@@ -122,7 +122,7 @@ STATICFILES_DIRS = (
 # Template Settings
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
-    os.path.join(BASE_DIR, 'apps/contact/templates'),
+    os.path.join(BASE_DIR, 'templates/contact'),
 )
 
 # Turn off south during test
