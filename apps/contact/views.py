@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse, get_object_or_404
+from django.shortcuts import render, HttpResponse, Http404
 from django.views.generic import View
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import json
@@ -20,8 +20,9 @@ logr = logging.getLogger(__name__)
 class Main(View):
     def get(self, request):
         logr.info(request.path)
-        qw = Contact.objects.all()[0: 1]
-        bio = get_object_or_404(qw)
+        bio = Contact.objects.first()
+        if bio is None:
+            raise Http404
         logr.debug(bio)
         return render(request, 'index.html', {'bio': bio})
 
@@ -65,8 +66,9 @@ class UpdaterActive(View):
 
 class Editor(View):
     def get(self, request):
-        qw = Contact.objects.all()[0: 1]
-        filing = get_object_or_404(qw)
+        filing = Contact.objects.first()
+        if filing is None:
+            raise Http404
         form = EditForm(instance=filing)
         photo = filing.photo
         return render(request, 'edit.html', {'form': form, 'photo': photo})
@@ -78,7 +80,7 @@ class Editor(View):
         new_data = {}
         for i in data:
             new_data[i['name']] = i['value']
-        id = Contact.objects.all()[0]
+        id = Contact.objects.first()
         edit_form = EditForm(new_data, instance=id)
         if edit_form.is_valid():
             edit_form.save()
