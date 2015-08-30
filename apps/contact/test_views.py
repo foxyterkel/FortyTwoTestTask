@@ -9,7 +9,6 @@ can be start as separare test
 from django.test import TestCase
 import re
 
-from django.conf import settings
 from apps.contact.forms import EditForm
 from apps.contact.models import Contact, RequestEntry
 from apps.contact.templatetags.admin_editor import admin_editor_url
@@ -195,7 +194,7 @@ class EditorTester(TestCase):
         """
         Testing edit page.
         """
-        sergii = Contact.objects.get(pk=settings.PK_MAIN_PAGE)
+        sergii = Contact.objects.all()[0]
         sergii.first_name = 'Andrii'
         sergii.save()
         responce = self.client.get('/edit/')

@@ -1,6 +1,5 @@
 from django.test import TestCase
 
-from django.conf import settings
 from apps.contact.models import Contact, RequestEntry, Signal
 
 
@@ -53,7 +52,7 @@ class SignalTester(TestCase):
         """
         testing signal save.
         """
-        sergii = Contact.objects.get(pk=settings.PK_MAIN_PAGE)
+        sergii = Contact.objects.all()[0]
         sergii.first_name = 'Andrii'
         sergii.save()
         latest = Signal.objects.last()

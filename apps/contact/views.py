@@ -20,7 +20,8 @@ logr = logging.getLogger(__name__)
 class Main(View):
     def get(self, request):
         logr.info(request.path)
-        bio = get_object_or_404(Contact, pk=settings.PK_MAIN_PAGE)
+        qw = Contact.objects.all()[0: 1]
+        bio = get_object_or_404(qw)
         logr.debug(bio)
         return render(request, 'index.html', {'bio': bio})
 
@@ -28,7 +29,6 @@ class Main(View):
 class RequestSpy(View):
     def get(self, request):
         number = request.GET.get('number', 1)
-        print(number)
         if type(number) == 'str':
             number = int(number)
         request_set = RequestEntry.objects.filter(priority=number)
@@ -65,7 +65,8 @@ class UpdaterActive(View):
 
 class Editor(View):
     def get(self, request):
-        filing = get_object_or_404(Contact, pk=settings.PK_MAIN_PAGE)
+        qw = Contact.objects.all()[0: 1]
+        filing = get_object_or_404(qw)
         form = EditForm(instance=filing)
         photo = filing.photo
         return render(request, 'edit.html', {'form': form, 'photo': photo})
@@ -77,7 +78,7 @@ class Editor(View):
         new_data = {}
         for i in data:
             new_data[i['name']] = i['value']
-        id = Contact.objects.get(pk=settings.PK_MAIN_PAGE)
+        id = Contact.objects.all()[0]
         edit_form = EditForm(new_data, instance=id)
         if edit_form.is_valid():
             edit_form.save()
