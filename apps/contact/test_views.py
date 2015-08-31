@@ -23,7 +23,7 @@ class MainTester(TestCase):
 
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
-        self.assertIsInstance(response.context['bio'], Contact)
+        self.assertEqual(response.context['bio'], Contact.objects.first())
 
     def test_with_changed_entry(self):
         """
@@ -36,6 +36,7 @@ class MainTester(TestCase):
         sergii.save()
         response = self.client.get('/')
         self.assertIn('Andrii', response.content)
+        self.assertEqual(response.context['bio'], Contact.objects.first())
 
     def test_main_with_unicode(self):
         """
@@ -53,6 +54,7 @@ class MainTester(TestCase):
         self.assertIn('+380662352011', response.content)
         self.assertIn('My little story', response.content)
         self.assertIn('terkel919@gmail.com', response.content)
+        self.assertEqual(response.context['bio'], Contact.objects.first())
 
     def test_main_page(self):
         """
@@ -64,6 +66,7 @@ class MainTester(TestCase):
         self.assertIn('+380662352011', response.content)
         self.assertIn('My little story', response.content)
         self.assertIn('terkel919@gmail.com', response.content)
+        self.assertEqual(response.context['bio'], Contact.objects.first())
 
     def test_main_page_with_two_entry(self):
         """
@@ -76,6 +79,7 @@ class MainTester(TestCase):
         self.assertIn('terkel919@gmail.com', response.content)
         self.assertNotIn('Andrii', response.content)
         self.assertNotIn('andrii@mail.ru', response.content)
+        self.assertEqual(response.context['bio'], Contact.objects.first())
 
     def test_main_page_with_zero_entry(self):
         """
