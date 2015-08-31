@@ -25,6 +25,18 @@ class MainTester(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIsInstance(response.context['bio'], Contact)
 
+    def test_with_changed_entry(self):
+        """
+        Cheking that main page content is'n static.
+        We changing entry, and looking for this changes in the main page.
+        It prove that main page represent entry.
+        """
+        sergii = Contact.objects.first()
+        sergii.first_name = 'Andrii'
+        sergii.save()
+        response = self.client.get('/')
+        self.assertIn('Andrii', response.content)
+
     def test_main_with_unicode(self):
         """
         Testing main page with unicode entry.
