@@ -258,6 +258,3 @@ def create_other_user():
                                email='andrii@mail.ru',
                                contacts='+380662453012',
                                bio='His little story!')
-
-
-

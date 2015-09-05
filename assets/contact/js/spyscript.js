@@ -13,7 +13,8 @@ function start(){
         if (isFocus == false){
                   $.get('/updater-unactive/', {priority: priority} , function (data) {
                       document.title = '('+(data)+') new request';
-                  });}
+                  });
+              }
         if (isFocus == true) {
             $.get('/updater-active/', {priority: priority}, function (data) {
               if (parseInt(data.number) > 0) {
