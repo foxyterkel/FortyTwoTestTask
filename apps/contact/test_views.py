@@ -52,7 +52,7 @@ class MainTester(TestCase):
         self.check_rendered_page_for_content(Contact.objects.first(),
                                              ['first_name', 'last_name',
                                              'contacts', 'bio', 'email'],
-                                             response.content, uncode=True)
+                                             response.content)
         self.assertEqual(response.context['bio'], Contact.objects.first())
 
     def test_main_page(self):
@@ -91,12 +91,8 @@ class MainTester(TestCase):
         self.assertIn('Page Not Found', response.content)
         self.assertEqual(response.status_code, 404)
 
-    def check_rendered_page_for_content(self, obj, fields, content,
-                                        uncode=False):
+    def check_rendered_page_for_content(self, obj, fields, content):
         for i in fields:
-            if not uncode:
-                self.assertIn(getattr(obj, i), content)
-            else:
                 self.assertIn(getattr(obj, i).encode('utf-8'), content)
 
 
