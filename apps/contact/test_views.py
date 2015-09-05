@@ -49,11 +49,10 @@ class MainTester(TestCase):
                                contacts=u'+380662352011',
                                bio=u'My little story!')
         response = self.client.get('/')
-        self.assertIn('Їжак', response.content)
-        self.assertIn('Євлампій', response.content)
-        self.assertIn('+380662352011', response.content)
-        self.assertIn('My little story', response.content)
-        self.assertIn('terkel919@gmail.com', response.content)
+        self.check_rendered_page_for_content(Contact.objects.first(),
+                                             ['first_name', 'last_name',
+                                             'contacts', 'bio', 'email'],
+                                             response.content, uncode=True)
         self.assertEqual(response.context['bio'], Contact.objects.first())
 
     def test_main_page(self):
@@ -61,11 +60,10 @@ class MainTester(TestCase):
         test_main_page for testing main page.
         """
         response = self.client.get('/')
-        self.assertIn('Sergii', response.content)
-        self.assertIn('Vanzha', response.content)
-        self.assertIn('+380662352011', response.content)
-        self.assertIn('My little story', response.content)
-        self.assertIn('terkel919@gmail.com', response.content)
+        self.check_rendered_page_for_content(Contact.objects.first(),
+                                             ['first_name', 'last_name',
+                                             'contacts', 'bio', 'email'],
+                                             response.content)
         self.assertEqual(response.context['bio'], Contact.objects.first())
 
     def test_main_page_with_two_entry(self):
@@ -75,8 +73,10 @@ class MainTester(TestCase):
         """
         create_other_user()
         response = self.client.get('/')
-        self.assertIn('Sergii', response.content)
-        self.assertIn('terkel919@gmail.com', response.content)
+        self.check_rendered_page_for_content(Contact.objects.first(),
+                                             ['first_name', 'last_name',
+                                             'contacts', 'bio', 'email'],
+                                             response.content)
         self.assertNotIn('Andrii', response.content)
         self.assertNotIn('andrii@mail.ru', response.content)
         self.assertEqual(response.context['bio'], Contact.objects.first())
@@ -90,6 +90,14 @@ class MainTester(TestCase):
         response = self.client.get('/')
         self.assertIn('Page Not Found', response.content)
         self.assertEqual(response.status_code, 404)
+
+    def check_rendered_page_for_content(self, obj, fields, content,
+                                        uncode=False):
+        for i in fields:
+            if not uncode:
+                self.assertIn(getattr(obj, i), content)
+            else:
+                self.assertIn(getattr(obj, i).encode('utf-8'), content)
 
 
 class SpyTester(TestCase):
@@ -250,3 +258,6 @@ def create_other_user():
                                email='andrii@mail.ru',
                                contacts='+380662453012',
                                bio='His little story!')
+
+
+

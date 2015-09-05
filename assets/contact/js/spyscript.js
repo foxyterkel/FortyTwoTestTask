@@ -11,14 +11,11 @@ function start(){
     setInterval(function(){
         console.log(isFocus)
         if (isFocus == false){
-                  console.log(priority)
-                  $.get('/updater-unactive/', {priority:priority} , function (data) {
+                  $.get('/updater-unactive/', {priority: priority} , function (data) {
                       document.title = '('+(data)+') new request';
                   });}
         if (isFocus == true) {
-                            console.log(priority)
-
-            $.get('/updater-active/', {priority:priority}, function (data) {
+            $.get('/updater-active/', {priority: priority}, function (data) {
               if (parseInt(data.number) > 0) {
                 $.each(data.requests, function(index, el) {
                     if ($('#request_container div.panel').length == 10){
