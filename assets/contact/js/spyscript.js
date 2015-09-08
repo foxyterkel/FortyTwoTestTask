@@ -4,9 +4,6 @@ $(document).ready(function () {
     window.onblur = function () {isFocus = false;};
     window.onfocus = function () {isFocus = true;};
     var priority = $('#priority').text()
-    console.log(priority)
-
-
     start();
 
 
@@ -19,7 +16,6 @@ function start(){
                   });
               }
         if (isFocus == true) {
-            console.log(priority)
             $.get('/updater-active/', {priority: priority}, function (data) {
               if (parseInt(data.number) > 0) {
                 $.each(data.requests, function(index, el) {
