@@ -2,8 +2,6 @@ $(document).ready(function(){
 
     var csrftoken= $.cookie('csrftoken');
 
-    console.log(csrftoken)
-
     function csrvSafeMethod(method){
         return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method))
     };
