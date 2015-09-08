@@ -1,4 +1,4 @@
-42cc-pystyle==0.0.15
+42cc-pystyle
 Django==1.6.7
 Pillow==2.9.0
 South==1.0.2

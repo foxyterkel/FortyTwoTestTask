@@ -8,36 +8,13 @@ can be start as separare test
 
 from django.test import TestCase
 import re
-from django.contrib.auth.models import User
 
-from django.conf import settings
 from apps.contact.forms import EditForm
-from apps.contact.models import Contact, RequestEntry, Signal
+from apps.contact.models import Contact, RequestEntry
 from apps.contact.templatetags.admin_editor import admin_editor_url
 
 
 class MainTester(TestCase):
-
-    def setUp(self):
-        Contact.objects.create(first_name='Sergii', last_name='Vanzha',
-                               email='terkel919@gmail.com',
-                               contacts='+380662352011',
-                               bio='My little story')
-        User.objects.create_superuser(username='admin',
-                                      email='', password='admin')
-
-    def tearDown(self):
-        Contact.objects.all().delete()
-        User.objects.all().delete()
-
-    def test_main(self):
-        """
-        test_main for testing entry in base.
-        """
-
-        contact = Contact.objects.all()
-        self.assertEqual(len(contact), 1)
-        self.assertEqual(contact[0].first_name, 'Sergii')
 
     def test_main_context(self):
         """
@@ -46,7 +23,20 @@ class MainTester(TestCase):
 
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
-        self.assertIsInstance(response.context['bio'], Contact)
+        self.assertEqual(response.context['bio'], Contact.objects.first())
+
+    def test_with_changed_entry(self):
+        """
+        Cheking that main page content is'n static.
+        We changing entry, and looking for this changes in the main page.
+        It prove that main page represent entry.
+        """
+        sergii = Contact.objects.first()
+        sergii.first_name = 'Andrii'
+        sergii.save()
+        response = self.client.get('/')
+        self.assertIn('Andrii', response.content)
+        self.assertEqual(response.context['bio'], Contact.objects.first())
 
     def test_main_with_unicode(self):
         """
@@ -59,22 +49,22 @@ class MainTester(TestCase):
                                contacts=u'+380662352011',
                                bio=u'My little story!')
         response = self.client.get('/')
-        self.assertIn('Їжак', response.content)
-        self.assertIn('Євлампій', response.content)
-        self.assertIn('+380662352011', response.content)
-        self.assertIn('My little story', response.content)
-        self.assertIn('terkel919@gmail.com', response.content)
+        self.check_rendered_page_for_content(Contact.objects.first(),
+                                             ['first_name', 'last_name',
+                                             'contacts', 'bio', 'email'],
+                                             response.content)
+        self.assertEqual(response.context['bio'], Contact.objects.first())
 
     def test_main_page(self):
         """
         test_main_page for testing main page.
         """
         response = self.client.get('/')
-        self.assertIn('Sergii', response.content)
-        self.assertIn('Vanzha', response.content)
-        self.assertIn('+380662352011', response.content)
-        self.assertIn('My little story', response.content)
-        self.assertIn('terkel919@gmail.com', response.content)
+        self.check_rendered_page_for_content(Contact.objects.first(),
+                                             ['first_name', 'last_name',
+                                             'contacts', 'bio', 'email'],
+                                             response.content)
+        self.assertEqual(response.context['bio'], Contact.objects.first())
 
     def test_main_page_with_two_entry(self):
         """
@@ -83,10 +73,13 @@ class MainTester(TestCase):
         """
         create_other_user()
         response = self.client.get('/')
-        self.assertIn('Sergii', response.content)
-        self.assertIn('terkel919@gmail.com', response.content)
+        self.check_rendered_page_for_content(Contact.objects.first(),
+                                             ['first_name', 'last_name',
+                                             'contacts', 'bio', 'email'],
+                                             response.content)
         self.assertNotIn('Andrii', response.content)
         self.assertNotIn('andrii@mail.ru', response.content)
+        self.assertEqual(response.context['bio'], Contact.objects.first())
 
     def test_main_page_with_zero_entry(self):
         """
@@ -98,43 +91,12 @@ class MainTester(TestCase):
         self.assertIn('Page Not Found', response.content)
         self.assertEqual(response.status_code, 404)
 
-    def test_main_page_with_wrong_email(self):
-        """
-        test_main_page for testing main page. When in base one entry,
-        but wrong email.
-        """
-
-        Contact.objects.all().delete()
-        create_other_user()
-        response = self.client.get('/')
-        self.assertIn('Page Not Found', response.content)
-        self.assertEqual(response.status_code, 404)
+    def check_rendered_page_for_content(self, obj, fields, content):
+        for i in fields:
+                self.assertIn(getattr(obj, i).encode('utf-8'), content)
 
 
 class SpyTester(TestCase):
-
-    def setUp(self):
-        Contact.objects.create(first_name='Sergii', last_name='Vanzha',
-                               email='terkel919@gmail.com',
-                               contacts='+380662352011',
-                               bio='My little story')
-        User.objects.create_superuser(username='admin',
-                                      email='', password='admin')
-
-    def tearDown(self):
-        Contact.objects.all().delete()
-        User.objects.all().delete()
-
-    def test_request_spy_for_creating(self):
-        """
-        Checking status code of the page, and increasing number of the
-        models entry after visiting 1 link.
-        """
-        first_watched = len(RequestEntry.objects.filter(watched=False))
-        response = self.client.get('/')
-        self.assertEqual(response.status_code, 200)
-        secound_watched = RequestEntry.objects.filter(watched=False)
-        self.assertEqual(len(secound_watched), first_watched+1)
 
     def test_request_spy_for_marking(self):
         """
@@ -212,18 +174,6 @@ class SpyTester(TestCase):
 
 class AuthTester(TestCase):
 
-    def setUp(self):
-        Contact.objects.create(first_name='Sergii', last_name='Vanzha',
-                               email='terkel919@gmail.com',
-                               contacts='+380662352011',
-                               bio='My little story')
-        User.objects.create_superuser(username='admin',
-                                      email='', password='admin')
-
-    def tearDown(self):
-        Contact.objects.all().delete()
-        User.objects.all().delete()
-
     def test_auth_pass(self):
         """
         Authentication test.
@@ -242,18 +192,6 @@ class AuthTester(TestCase):
 
 
 class EditorTester(TestCase):
-
-    def setUp(self):
-        Contact.objects.create(first_name='Sergii', last_name='Vanzha',
-                               email='terkel919@gmail.com',
-                               contacts='+380662352011',
-                               bio='My little story')
-        User.objects.create_superuser(username='admin',
-                                      email='', password='admin')
-
-    def tearDown(self):
-        Contact.objects.all().delete()
-        User.objects.all().delete()
 
     def test_editor_with_sergii(self):
         """
@@ -276,7 +214,7 @@ class EditorTester(TestCase):
         """
         Testing edit page.
         """
-        sergii = Contact.objects.get(email=settings.EMAIL_FOR_MAIN_PAGE)
+        sergii = Contact.objects.all()[0]
         sergii.first_name = 'Andrii'
         sergii.save()
         responce = self.client.get('/edit/')
@@ -289,7 +227,7 @@ class EditorTester(TestCase):
         Contact.objects.all().delete()
         create_other_user()
         responce = self.client.get('/edit/')
-        self.assertIn('Page Not Found', responce.content)
+        self.assertIn('Andrii', responce.content)
 
     def test_admin_editor_contact(self):
         """
@@ -309,49 +247,6 @@ class EditorTester(TestCase):
         url = re.search("href=(\S+)>", admin_editor_url(middle)).group(1)
         responce = self.client.get(url)
         self.assertEqual(responce.status_code, 200)
-
-
-class SignalTester(TestCase):
-
-    def setUp(self):
-        Contact.objects.create(first_name='Sergii', last_name='Vanzha',
-                               email='terkel919@gmail.com',
-                               contacts='+380662352011',
-                               bio='My little story')
-        User.objects.create_superuser(username='admin',
-                                      email='', password='admin')
-
-    def tearDown(self):
-        Contact.objects.all().delete()
-        User.objects.all().delete()
-
-    def test_signal_create(self):
-        """
-        testing signal create.
-        """
-        create_other_user()
-        count = len(Signal.objects.all())
-        self.assertNotEqual(count, 0)
-        latest = Signal.objects.last()
-        self.assertEqual(latest.action, 'create')
-
-    def test_signal_delete(self):
-        """
-        testing signal delete.
-        """
-        Contact.objects.all().delete()
-        latest = Signal.objects.last()
-        self.assertEqual(latest.action, 'delete')
-
-    def test_signal_save(self):
-        """
-        testing signal save.
-        """
-        sergii = Contact.objects.get(email=settings.EMAIL_FOR_MAIN_PAGE)
-        sergii.first_name = 'Andrii'
-        sergii.save()
-        latest = Signal.objects.last()
-        self.assertEqual(latest.action, 'save')
 
 
 def create_other_user():

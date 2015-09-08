@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse, get_object_or_404
+from django.shortcuts import render, HttpResponse, Http404
 from django.views.generic import View
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import json
@@ -8,9 +8,7 @@ from io import BytesIO
 import base64
 import uuid
 import re
-from django.http import Http404
 import logging
-from django.core.exceptions import ObjectDoesNotExist
 
 from apps.contact.models import Contact, RequestEntry
 from django.conf import settings
@@ -22,9 +20,8 @@ logr = logging.getLogger(__name__)
 class Main(View):
     def get(self, request):
         logr.info(request.path)
-        try:
-            bio = Contact.objects.get(email=settings.EMAIL_FOR_MAIN_PAGE)
-        except ObjectDoesNotExist:
+        bio = Contact.objects.first()
+        if bio is None:
             raise Http404
         logr.debug(bio)
         return render(request, 'index.html', {'bio': bio})
@@ -32,26 +29,35 @@ class Main(View):
 
 class RequestSpy(View):
     def get(self, request):
-        RequestEntry.objects.filter(watched=False).update(watched=True)
-        last_requests = RequestEntry.objects.all()[:10]
+        number = request.GET.get('number', 1)
+        if type(number) == 'str':
+            number = int(number)
+        request_set = RequestEntry.objects.filter(priority=number)
+        request_set.filter(watched=False).update(watched=True)
+        last_requests = request_set[:10]
         logr.debug([i.url_path for i in last_requests])
         return render(request, 'request.html', {'last_requests':
-                                                last_requests})
+                                                last_requests,
+                                                'priority': number})
 
 
 class UpdaterUnactive(View):
     def get(self, request):
-        unmarked = RequestEntry.objects.filter(watched=False)
+        priority = int(request.GET.get('priority'))
+        requ_set = RequestEntry.objects.filter(priority=priority)
+        unmarked = requ_set.filter(watched=False)
         return HttpResponse(len(unmarked))
 
 
 class UpdaterActive(View):
     def get(self, request):
-        unmarked = RequestEntry.objects.filter(watched=False)
+        priority = int(request.GET.get('priority'))
+        requ_set = RequestEntry.objects.filter(priority=priority)
+        unmarked = requ_set.filter(watched=False)
         res = []
         for i in unmarked:
             res.append([i.url_path,
-                       i.created_at.strftime('%b. %d, %Y, %H:%M')])
+                       i.created_at.strftime('%b. %d, %Y, %H:%M'), i.pk])
         res.reverse()
         data = {'requests': res, 'number': len(unmarked)}
         RequestEntry.objects.filter(watched=False).update(watched=True)
@@ -60,7 +66,9 @@ class UpdaterActive(View):
 
 class Editor(View):
     def get(self, request):
-        filing = get_object_or_404(Contact, email=settings.EMAIL_FOR_MAIN_PAGE)
+        filing = Contact.objects.first()
+        if filing is None:
+            raise Http404
         form = EditForm(instance=filing)
         photo = filing.photo
         return render(request, 'edit.html', {'form': form, 'photo': photo})
@@ -72,7 +80,7 @@ class Editor(View):
         new_data = {}
         for i in data:
             new_data[i['name']] = i['value']
-        id = Contact.objects.get(email=settings.EMAIL_FOR_MAIN_PAGE)
+        id = Contact.objects.first()
         edit_form = EditForm(new_data, instance=id)
         if edit_form.is_valid():
             edit_form.save()
@@ -82,6 +90,19 @@ class Editor(View):
                 id.save()
             return HttpResponse('Saved! Your model was updated.')
         return HttpResponse(edit_form.errors)
+
+
+class UpdatePriority(View):
+    def post(self, request):
+        pk = request.POST.get('pk')
+        direct = request.POST.get('direct')
+        req_ent = RequestEntry.objects.get(pk=pk)
+        if direct == 'up':
+            req_ent.priority += 1
+        else:
+            req_ent.priority -= 1
+        req_ent.save()
+        return HttpResponse('done')
 
 
 def prepare_picture(json_data):

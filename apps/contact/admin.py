@@ -7,6 +7,11 @@ from apps.contact.models import RequestEntry, Contact, Signal
 class RequestEntryAdmin(admin.ModelAdmin):
     list_display = ('url_path', 'created_at')
 
-admin.site.register(Contact)
+
+class ContactAdmin(admin.ModelAdmin):
+    list_display = ('first_name', 'last_name', 'birth_date', 'contacts',
+                    'bio', 'email', 'jaber', 'skype', 'other_contacts')
+
+admin.site.register(Contact, ContactAdmin)
 admin.site.register(RequestEntry, RequestEntryAdmin)
 admin.site.register(Signal)
