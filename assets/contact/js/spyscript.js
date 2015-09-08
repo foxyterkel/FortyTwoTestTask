@@ -4,6 +4,9 @@ $(document).ready(function () {
     window.onblur = function () {isFocus = false;};
     window.onfocus = function () {isFocus = true;};
     var priority = $('#priority').text()
+    console.log(priority)
+
+
     start();
 
 
