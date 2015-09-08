@@ -9,7 +9,6 @@ $(document).ready(function () {
 
 function start(){
     setInterval(function(){
-        console.log(isFocus)
         if (isFocus == false){
                   $.get('/updater-unactive/', {priority: priority} , function (data) {
                       document.title = '('+(data)+') new request';
