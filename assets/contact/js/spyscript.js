@@ -11,7 +11,9 @@ function start(){
     setInterval(function(){
         if (isFocus == false){
                   $.get('/updater-unactive/', {priority: priority} , function (data) {
-                      document.title = '('+(data)+') new request';
+                      if (data > 0){
+                      document.title = '('+(data)+') | Request spy';
+                      }
                   });
               }
         if (isFocus == true) {
@@ -32,7 +34,7 @@ function start(){
                         <div class="panel-body">'+el[0]+'</div></div>');
                     });
               };
-              document.title = '(0) new request';
+              document.title = 'Request spy';
             });
         }   
     },2000);

@@ -117,7 +117,8 @@ class SpyTester(TestCase):
         RequestEntry.objects.all().delete()
         response = self.client.get('/spy/')
         self.assertEqual(response.status_code, 200)
-        self.assertIn('/spy/', response.content)
+        entry = RequestEntry.objects.get(url_path='/spy/')
+        self.assertIn(entry, response.context['last_requests'])
 
     def test_request_spy_all_watched(self):
         """
@@ -129,7 +130,8 @@ class SpyTester(TestCase):
             i.save()
         response = self.client.get('/spy/')
         self.assertEqual(response.status_code, 200)
-        self.assertIn('/spy/', response.content)
+        entry = RequestEntry.objects.get(url_path='/spy/')
+        self.assertIn(entry, response.context['last_requests'])
 
     def test_request_spy_all_unwatched(self):
         """
@@ -141,17 +143,18 @@ class SpyTester(TestCase):
             i.save()
         response = self.client.get('/spy/')
         self.assertEqual(response.status_code, 200)
-        self.assertIn('/spy/', response.content)
+        entry = RequestEntry.objects.get(url_path='/spy/')
+        self.assertIn(entry, response.context['last_requests'])
 
     def test_request_spy_entry(self):
         """
         Cheking visited url_path on the page of spy.
         """
-        self.client.get('/admin/')
-        self.client.get('/edit/')
+        entry1 = RequestEntry.objects.create(url_path='/admin/')
+        entry2 = RequestEntry.objects.create(url_path='/edit/')
         response = self.client.get('/spy/')
-        self.assertIn('/admin/', response.content)
-        self.assertIn('/edit/', response.content)
+        self.assertIn(entry1, response.context['last_requests'])
+        self.assertIn(entry2, response.context['last_requests'])
 
     def test_last_ten_request(self):
         """
@@ -161,7 +164,7 @@ class SpyTester(TestCase):
         urls = ['/spy/', '/', '/admin/', '/edit/', '/spy/', '/', '/admin/',
                 '/edit/', '/']
         for i in urls:
-            self.client.get(i)
+            RequestEntry.objects.create(url_path=i)
         responce = self.client.get('/spy/')
         self.assertEqual(len(responce.context['last_requests']), 10)
         urls.append('/spy/')
