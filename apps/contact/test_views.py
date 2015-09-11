@@ -166,13 +166,17 @@ class SpyTester(TestCase):
         for i in urls:
             RequestEntry.objects.create(url_path=i)
         responce = self.client.get('/spy/')
-        self.assertEqual(len(responce.context['last_requests']), 10)
-        urls.append('/spy/')
-        urls.reverse()
-        index = 0
+        last_ten = RequestEntry.objects.all()[:10]
+        self.assertEqual(list(last_ten),
+                         list(responce.context['last_requests']))
+
+    def test_page_for_randered_context(self):
+        """
+        Check if page renders context
+        """
+        responce = self.client.get('/spy/')
         for i in responce.context['last_requests']:
-            self.assertEquals(i.url_path, urls[index])
-            index += 1
+            self.assertIn(i.url_path, responce.content)
 
 
 class AuthTester(TestCase):
