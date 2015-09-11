@@ -10,13 +10,7 @@
 {% endblock %}
 
 {% block content %}
-{% if user.is_authenticated %}
-	<a class="btn btn-default col-md-1 col-md-offset-9 log" href="/account/logout/">Logout</a>
-	{% load admin_editor %}
-	{% admin_editor_url user %}
-{% else %}
-	<a class="btn btn-default col-md-1 col-md-offset-10 log" href="/account/login/">Login</a>
-{% endif %}
+
 {% load staticfiles %}
 {% load bootstrap %}
 	<div id='edit_wrapper'></div>
