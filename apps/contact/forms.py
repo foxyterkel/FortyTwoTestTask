@@ -10,8 +10,8 @@ class EditForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             'first_name': forms.TextInput(attrs={'size': 50,
-                                          'id': 'first_name',
-                                          'class': 'form-control'}),
+                                                 'id': 'first_name',
+                                                 'class': 'form-control'}),
             'last_name': forms.TextInput(attrs={'size': 50,
                                                 'id': 'last_name',
                                                 'class': 'form-control'}),
@@ -30,7 +30,7 @@ class EditForm(forms.ModelForm):
             'phone': forms.TextInput(attrs={'size': 50, 'id': 'phone',
                                             'class': 'form-control'}),
             'other_contacts': forms.Textarea(attrs={'cols': 70, 'rows': 4,
-                                             'id': 'other_contacts',
-                                             'class': 'form-control'}),
+                                                    'id': 'other_contacts',
+                                                    'class': 'form-control'}),
             'photo': forms.FileInput(attrs={'id': 'photo'})
         }
