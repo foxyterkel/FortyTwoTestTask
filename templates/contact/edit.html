@@ -4,30 +4,21 @@
 {% block extra_static %}
 {% load staticfiles %}
 <img src={% static "images/ajax-loader.gif" %} id="loader">
-<script src={% static 'js/jquery.cookie.js' %}></script>
-<script src={% static 'js/jquery.json.js' %}></script>
-<script src={% static 'js/editor.js' %}></script>
+<link href={% static "css/jquery-ui.css" %} rel="stylesheet">
+<script src={% static "js/jquery-ui.js" %}></script>
+<script src={% static 'contact/js/jquery.cookie.js' %}></script>
+<script src={% static 'contact/js/jquery.json.js' %}></script>
+<script src={% static 'contact/js/editor.js' %}></script>
 {% endblock %}
 
 {% block content %}
 
 {% load staticfiles %}
-{% load bootstrap %}
 	<div id='edit_wrapper'></div>
 		<div class="col-md-11">
 			<h2 class="col-md-offset-1">Editing</h2>
 			<hr>
-			<form id="edit_form" class="form-horizontal ">
-				{{ form|bootstrap_horizontal }}
-				{% if photo %}
-					<img id="image_picture" src={{ photo.url }} class="img-thumbnai col-md-offset-2">
-				{% else %}
-					<img id="image_picture" src='' style="display:none;" class="img-thumbnai col-md-offset-2">
-				{% endif %}
-				<br>
-				<button id="submit" type='submit' class="btn btn-primary col-md-offset-2 edit_button">Edit</button>
-				<button id='cancel' class="btn  btn-default edit_button">Cancel</button>
-			</form>
+			{% include 'editform.html' %}
 		
 			<br>
 			<div id="status" class="alert alert-info" role='alert'></div>

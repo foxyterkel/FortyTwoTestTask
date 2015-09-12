@@ -43,7 +43,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'apps.contact',
     'south',
-    'bootstrapform',
     'apps.contact.templatetags.admin_editor',
 )
 

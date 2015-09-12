@@ -1,0 +1,77 @@
+
+<form id="edit_form">
+    <div class="row">
+        <div class='col-md-5'>
+            <dl class="dl-horizontal">
+
+                <div class="input-group">
+                <dt><label for='{{ form.first_name.id_for_label}}'>First name:</label></dt>
+                <dd>{{ form.first_name }}</dd>
+                </div>
+
+                <div class="input-group">
+                <dt><label for='{{ form.last_name.id_for_label}}'>Last name:</label></dt>
+                <dd>{{ form.last_name }}</dd>
+                </div>
+
+                <div class="input-group">
+                <dt><label for='{{ form.birth_date.id_for_label}}'>Birth date:</label></dt>
+                <dd>{{ form.birth_date }}</dd>
+                </div>
+                
+
+                <dt><label for='{{ form.photo.id_for_label}}'>Photo:</label></dt>
+                <dd>
+                {{ form.photo }}
+                        {% if photo %}
+                            <img id="image_picture" src={{ photo.url }} class="img-thumbnai col-md-offset-2">
+                        {% else %}
+                            <img id="image_picture" src='' style="display:none;" class="img-thumbnai col-md-offset-2">
+                        {% endif %}
+                </dd>
+            </dl>
+        </div>
+
+
+            <div class='col-md-5'>
+                <dl class="dl-horizontal">
+
+                    <div class="input-group">
+                    <dt><label for='{{ form.contacts.id_for_label}}'>Contacts:</label></dt>
+                    <dd>{{ form.contacts }}</dd>
+                    </div>
+
+                    <div class="input-group">
+                    <dt><label for='{{ form.email.id_for_label}}'>Email:</label></dt>
+                    <dd>{{ form.email }}</dd>
+                    </div>
+
+                    <div class="input-group">
+                    <dt><label for='{{ form.skype.id_for_label}}'>Skype:</label></dt>
+                    <dd>{{ form.skype }}</dd>
+                    </div>
+
+                    <div class="input-group">
+                    <dt><label for='{{ form.jaber.id_for_label}}'>Jaber:</label></dt>
+                    <dd>{{ form.jaber }}</dd>
+                    </div>
+
+                    <div class="input-group">
+                    <dt><label for='{{ form.other_contacts.id_for_label}}'>Other contacts:</label></dt>
+                    <dd>{{ form.other_contacts }}</dd>
+                    </div>
+
+                    <div class="input-group">
+                    <dt><label for='{{ form.bio.id_for_label}}'>Bio:</label></dt>
+                    <dd>{{ form.bio }}</dd>
+                    </div>
+                </dl>
+            </div>
+    </div>
+
+
+
+                <br>
+                <button id="submit" type='submit' class="btn btn-primary col-md-offset-2 edit_button">Edit</button>
+                <button id='cancel' class="btn  btn-default edit_button">Cancel</button>
+            </form>

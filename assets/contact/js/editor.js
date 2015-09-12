@@ -3,6 +3,7 @@
  */
 $(document).ready(function () {
 
+
     var csrftoken= $.cookie('csrftoken');
 
     function csrvSafeMethod(method){
@@ -20,6 +21,9 @@ $(document).ready(function () {
     });
 
 
+    $('#birth_date').datepicker({
+        dateFormat: 'yy-mm-dd'
+    });
 
     $('#edit_form').submit(function (eve) {
         eve.preventDefault();

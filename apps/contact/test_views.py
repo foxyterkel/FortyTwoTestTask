@@ -183,7 +183,7 @@ class AuthTester(TestCase):
 
     def test_auth_pass(self):
         """
-        Authentication test.
+        Authentication test. With correct data.
         """
         response = self.client.post('/account/login/', {'username': 'admin',
                                                         'password': 'admin'})
@@ -191,7 +191,7 @@ class AuthTester(TestCase):
 
     def test_auth_fail(self):
         """
-        Authentication test.
+        Authentication test. With incorrect data.
         """
         response = self.client.post('/account/login/', {'username': 'admyn',
                                                         'password': 'admin'})
@@ -202,7 +202,8 @@ class EditorTester(TestCase):
 
     def test_editor_with_sergii(self):
         """
-        Testing edit page.
+        Checking instance in context, and looking for the name on tha page
+        loaded from fixtures.
         """
         responce = self.client.get('/edit/')
         self.assertEqual(responce.status_code, 200)
@@ -211,7 +212,7 @@ class EditorTester(TestCase):
 
     def test_editor_without_sergii(self):
         """
-        Testing edit page.
+        Cheking 404 if there ara no contact.
         """
         Contact.objects.all().delete()
         responce = self.client.get('/edit/')
@@ -219,7 +220,7 @@ class EditorTester(TestCase):
 
     def test_editor_without_sergii_rename(self):
         """
-        Testing edit page.
+        Looking for the manually changed name in rendered page.
         """
         sergii = Contact.objects.all()[0]
         sergii.first_name = 'Andrii'
@@ -229,7 +230,7 @@ class EditorTester(TestCase):
 
     def test_editor_without_andrii(self):
         """
-        Testing edit page.
+        Looking for the name of new created contact on the rendered page.
         """
         Contact.objects.all().delete()
         create_other_user()
@@ -238,7 +239,9 @@ class EditorTester(TestCase):
 
     def test_admin_editor_contact(self):
         """
-        Testing castom template tags.
+        Testing castom template tags. Passing Contact object to function.
+        Fetching url. And cheking status code after getting responce
+        for this url.
         """
         contact = Contact.objects.all()[0]
         url = re.search("href=(\S+)>", admin_editor_url(contact)).group(1)
@@ -247,10 +250,11 @@ class EditorTester(TestCase):
 
     def test_admin_editor_middle(self):
         """
-        Testing castom template tags.
+        Testing castom template tags. Passing RequestEntry object to function.
+        Fetching url. And cheking status code after getting responce
+        for this url.
         """
-        self.client.get('/')
-        middle = RequestEntry.objects.all()[0]
+        middle = RequestEntry.objects.create(url_path='/edit/')
         url = re.search("href=(\S+)>", admin_editor_url(middle)).group(1)
         responce = self.client.get(url)
         self.assertEqual(responce.status_code, 200)
