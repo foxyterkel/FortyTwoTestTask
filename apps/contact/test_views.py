@@ -8,6 +8,7 @@ can be start as separare test
 
 from django.test import TestCase
 import re
+import json
 
 from apps.contact.forms import EditForm
 from apps.contact.models import Contact, RequestEntry
@@ -259,9 +260,53 @@ class EditorTester(TestCase):
         responce = self.client.get(url)
         self.assertEqual(responce.status_code, 200)
 
+    def test_for_ajax_request_correct(self):
+        """
+        Sending request with json data for editing page,
+        and check model for this changes
+        """
+        data = instance_to_dict(Contact.objects.first())
+        for i in data:
+            if i['name'] == 'first_name':
+                i['value'] = 'Andrii'
+        data_j = json.dumps(data)
+        responce = self.client.post('/edit/', data={'form': data_j,
+                                    'image': 'null'})
+        self.assertEqual(responce.content, 'Saved! Your model was updated.')
+        self.assertEqual(Contact.objects.first().first_name, 'Andrii')
+
+    def test_for_ajax_request_incorrect(self):
+        """
+        Sending request with incorrect json data for editing page,
+        and check model for initial state, and looking error keywords
+        in responce.
+        """
+        data = instance_to_dict(Contact.objects.first())
+        for i in data:
+            if i['name'] == 'first_name':
+                i['value'] = 'A'
+            elif i['name'] == 'contacts':
+                i['value'] = '1'
+        data_j = json.dumps(data)
+        responce = self.client.post('/edit/', data={'form': data_j,
+                                    'image': 'null'})
+        self.assertIn("first_name", responce.content)
+        self.assertIn("contacts", responce.content)
+        self.assertEqual(Contact.objects.first().first_name, 'Sergii')
+
 
 def create_other_user():
         Contact.objects.create(first_name='Andrii', last_name='Vanzha',
                                email='andrii@mail.ru',
                                contacts='+380662453012',
                                bio='His little story!')
+
+
+def instance_to_dict(ins):
+        res = []
+        fields = ['first_name', 'last_name', 'email', 'contacts', 'bio',
+                  'birth_date']
+        for i in ins.__dict__:
+            if i in fields:
+                res.append({'name': str(i), 'value': str(ins.__dict__[i])})
+        return res

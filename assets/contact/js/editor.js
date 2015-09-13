@@ -41,8 +41,16 @@ $(document).ready(function () {
 
 function sender (form,image){
     $.post('/edit/',{form:form,image:image},function(data){
-        $('#status').text(data).fadeIn('fast');
         console.log(data);
+        $('.errors_class').text('')
+        if ($.type(data) == 'string'){
+            $('#status').text(data).fadeIn('fast');
+        }
+        else {
+            $.each(data, function(index, el) {
+                $('#'+index+'_error').text(el);
+            });
+        }
     });
 };
 

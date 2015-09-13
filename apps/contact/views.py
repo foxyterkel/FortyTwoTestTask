@@ -89,7 +89,8 @@ class Editor(View):
                 id.photo = photo_file
                 id.save()
             return HttpResponse('Saved! Your model was updated.')
-        return HttpResponse(edit_form.errors)
+        return HttpResponse(json.dumps(edit_form.errors),
+                            content_type='application/json')
 
 
 class UpdatePriority(View):

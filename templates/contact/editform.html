@@ -6,17 +6,23 @@
 
                 <div class="input-group">
                 <dt><label for='{{ form.first_name.id_for_label}}'>First name:</label></dt>
-                <dd>{{ form.first_name }}</dd>
+                <dd>{{ form.first_name }}
+                <span id='{{ form.first_name.id_for_label }}_error' class='errors_class'></span>
+                </dd>
                 </div>
 
                 <div class="input-group">
                 <dt><label for='{{ form.last_name.id_for_label}}'>Last name:</label></dt>
-                <dd>{{ form.last_name }}</dd>
+                <dd>{{ form.last_name }}
+                <span id='{{ form.last_name.id_for_label }}_error' class='errors_class'></span>
+                </dd>
                 </div>
 
                 <div class="input-group">
                 <dt><label for='{{ form.birth_date.id_for_label}}'>Birth date:</label></dt>
-                <dd>{{ form.birth_date }}</dd>
+                <dd>{{ form.birth_date }}
+                <span id='{{ form.birsth_date.id_for_label }}_error' class='errors_class'></span>
+                </dd>
                 </div>
                 
 
@@ -28,6 +34,7 @@
                         {% else %}
                             <img id="image_picture" src='' style="display:none;" class="img-thumbnai col-md-offset-2">
                         {% endif %}
+                <span id='{{ form.photo.id_for_label }}_error' class='errors_class'></span>
                 </dd>
             </dl>
         </div>
@@ -38,32 +45,45 @@
 
                     <div class="input-group">
                     <dt><label for='{{ form.contacts.id_for_label}}'>Contacts:</label></dt>
-                    <dd>{{ form.contacts }}</dd>
+                    <dd>{{ form.contacts }}
+                    <span id='{{ form.contacts.id_for_label }}_error' class='errors_class'></span>
+                    </dd>
                     </div>
 
                     <div class="input-group">
                     <dt><label for='{{ form.email.id_for_label}}'>Email:</label></dt>
-                    <dd>{{ form.email }}</dd>
+                    <dd>{{ form.email }}
+                    <span id='{{ form.email.id_for_label }}_error' class='errors_class'></span>
+                    </dd>
                     </div>
 
                     <div class="input-group">
                     <dt><label for='{{ form.skype.id_for_label}}'>Skype:</label></dt>
-                    <dd>{{ form.skype }}</dd>
+                    <dd>{{ form.skype }}
+                    <span id='{{ form.skype.id_for_label }}_error' class='errors_class'></span>
+                    </dd>
                     </div>
 
                     <div class="input-group">
                     <dt><label for='{{ form.jaber.id_for_label}}'>Jaber:</label></dt>
-                    <dd>{{ form.jaber }}</dd>
+                    <dd>{{ form.jaber }}
+                    <span id='{{ form.jaber.id_for_label }}_error' class='errors_class'></span>
+                    </dd>
                     </div>
 
                     <div class="input-group">
                     <dt><label for='{{ form.other_contacts.id_for_label}}'>Other contacts:</label></dt>
-                    <dd>{{ form.other_contacts }}</dd>
+                    <dd>{{ form.other_contacts }}
+                    <span id='{{ form.other_contacts.id_for_label }}_error' class='errors_class'></span>
+                    </dd>
                     </div>
 
                     <div class="input-group">
                     <dt><label for='{{ form.bio.id_for_label}}'>Bio:</label></dt>
-                    <dd>{{ form.bio }}</dd>
+                    <dd>{{ form.bio }}
+                    <span id='{{ form.bio.id_for_label }}_error' class='errors_class'></span>
+                    </dd>
+
                     </div>
                 </dl>
             </div>

@@ -39,3 +39,7 @@ button.edit_button {
 	margin-top: 15px;
 }
 
+.errors_class{
+	color: red;
+	font-size: 12px;
+}
