@@ -76,6 +76,7 @@ class Editor(View):
     def post(self, request):
         form = request.POST.get('form')
         image_json = request.POST.get('image')
+        print(image_json)
         data = json.loads(form)
         new_data = {}
         for i in data:

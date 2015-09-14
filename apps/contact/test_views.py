@@ -9,7 +9,6 @@ can be start as separare test
 from django.test import TestCase
 import re
 import json
-
 from apps.contact.forms import EditForm
 from apps.contact.models import Contact, RequestEntry
 from apps.contact.templatetags.admin_editor import admin_editor_url
@@ -291,6 +290,7 @@ class EditorTester(TestCase):
         responce = self.client.post('/edit/', data={'form': data_j,
                                     'image': 'null'})
         self.assertIn("first_name", responce.content)
+        self.assertIn("application/json", responce['Content-Type'])
         self.assertIn("contacts", responce.content)
         self.assertEqual(Contact.objects.first().first_name, 'Sergii')
 
