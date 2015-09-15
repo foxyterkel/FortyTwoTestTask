@@ -289,9 +289,11 @@ class EditorTester(TestCase):
         data_j = json.dumps(data)
         responce = self.client.post('/edit/', data={'form': data_j,
                                     'image': 'null'})
-        self.assertIn("first_name", responce.content)
-        self.assertIn("application/json", responce['Content-Type'])
-        self.assertIn("contacts", responce.content)
+        res = json.loads(responce.content)
+        self.assertEqual(res["contacts"], ['Enter a valid value.'])
+        self.assertEqual(res["first_name"],
+                         ['Ensure this value has at least 2'
+                         ' characters (it has 1).'])
         self.assertEqual(Contact.objects.first().first_name, 'Sergii')
 
 
